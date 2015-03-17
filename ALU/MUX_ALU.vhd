@@ -19,9 +19,10 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use work.RISCCONSTANTS_PKG.all;
 
 entity MUX_ALU is
+	generic( DATAPATH	: integer :=16);
+	
 	port(	OP				: in std_logic_vector(3 downto 0);		-- Op code
 			ARITH			: in std_logic_vector(DATAPATH-1 downto 0);		-- output of arithmetic unit
 			LOGIC			: in std_logic_vector(DATAPATH-1 downto 0);		-- output of logic unit

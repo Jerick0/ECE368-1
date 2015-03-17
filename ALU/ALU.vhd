@@ -20,9 +20,10 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.all;
-use work.RISCCONSTANTS_PKG.all;
 
 entity ALU is
+	generic( DATAPATH	: integer :=16);
+	
 	port(	RA				: in std_logic_vector(DATAPATH-1 downto 0);		-- register A
 			RB				: in std_logic_vector(DATAPATH-1 downto 0);		-- register B
 			OPCODE		: in std_logic_vector(3 downto 0);		-- op code

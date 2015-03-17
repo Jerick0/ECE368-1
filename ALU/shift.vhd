@@ -20,9 +20,10 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_SIGNED.ALL;
-use work.RISCCONSTANTS_PKG.all;
 
 entity Shift is
+	generic( DATAPATH	: integer :=16);
+	
 	port( A				: in std_logic_vector(DATAPATH-1 downto 0);		-- First input
 			POS			: in std_logic_vector(3 downto 0);					-- Second input, amount to shift
 			OP				: in std_logic;											-- Op Code, only need MSB

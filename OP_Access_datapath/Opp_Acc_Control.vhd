@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    15:32:54 03/18/2015 
+-- Create Date:    14:46:06 03/18/2015 
 -- Design Name: 
--- Module Name:    mux2to1 - behavioral 
+-- Module Name:    Opp_Acc_Control - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,36 +29,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity mux2to1 is
-	generic(	num_bits		: integer:=16);
-	
-	port(	CLK 		: in  	STD_LOGIC;
-			RST 		: in  	STD_LOGIC;
-			IN_1		: in		std_logic_vector(num_bits-1 downto 0);
-			IN_2		: in 		std_logic_vector(num_bits-1 downto 0);
-			O	 		: out  	STD_LOGIC_VECTOR(num_bits-1 downto 0);
-			SEL 		: in 		std_logic);
-			
-end mux2to1;
+entity Opp_Acc_Control is
+    Port ( State_Instruction : in  STD_LOGIC;
+           CNTLA_out : out  STD_LOGIC;
+           CNTLB_out : out  STD_LOGIC);
+end Opp_Acc_Control;
 
-architecture behavioral of mux2to1 is
+architecture Behavioral of Opp_Acc_Control is
 
 begin
 
-Process(CLK, RST)
-	begin
-	
-		if (RST = '1') Then
-			Output <= (others => '0');
-		elsif (CLK'event and CLK='1') Then
-			if sel = '0' then
-				O <= IN_1;
-			elsif sel = '1' then
-				O <= IN_2;
-			end if;
-		end if;
-		
-	end process;
 
-end behavioral;
+end Behavioral;
 

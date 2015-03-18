@@ -46,7 +46,7 @@ begin
 	begin
 		if(RST = '1') then
 			Q <= (others =>'0');
-		elsif (CLK'event and CLK = '1') then
+		elsif (CLK'event and CLK = '0') then	-- trigger on falling edge
 			Q <= D;
 		end if;
 	end process;

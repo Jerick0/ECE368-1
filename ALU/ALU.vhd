@@ -27,6 +27,7 @@ entity ALU is
 	port(	RA				: in std_logic_vector(DATAPATH-1 downto 0);		-- register A
 			RB				: in std_logic_vector(DATAPATH-1 downto 0);		-- register B
 			OPCODE		: in std_logic_vector(3 downto 0);		-- op code
+			EN 			: in std_logic;
 			CCR			: out std_logic_vector(3 downto 0);		-- condition code register
 			ALU_OUT		: out std_logic_vector(DATAPATH-1 downto 0));	-- result of operation
 			-- LDST_OUT
@@ -65,6 +66,8 @@ begin
 	
 	MUX_UNIT: entity work.MUX_ALU
 		port map(	OP				=> OPCODE,
+						EN				=> EN,
+						regb  		=> RB,
 						ARITH			=> arith,
 						LOGIC			=> logic,
 						SHIFT			=> shift,

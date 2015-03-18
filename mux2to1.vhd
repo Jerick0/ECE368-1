@@ -36,7 +36,7 @@ entity mux2to1 is
 			RST 		: in  	STD_LOGIC;
 			IN_1		: in		std_logic_vector(num_bits-1 downto 0);
 			IN_2		: in 		std_logic_vector(num_bits-1 downto 0);
-			Output 	: out  	STD_LOGIC_VECTOR(num_bits-1 downto 0);
+			O	 		: out  	STD_LOGIC_VECTOR(num_bits-1 downto 0);
 			SEL 		: in 		std_logic);
 			
 end mux2to1;
@@ -52,9 +52,9 @@ Process(CLK, RST)
 			Output <= (others => '0');
 		elsif (CLK'event and CLK='1') Then
 			if sel = '0' then
-				Output <= IN_1;
+				O <= IN_1;
 			elsif sel = '1' then
-				Output <= IN_2;
+				O <= IN_2;
 			end if;
 		end if;
 		

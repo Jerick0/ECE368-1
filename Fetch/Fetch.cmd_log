@@ -1,0 +1,23 @@
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+xst -intstyle ise -ifn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.xst" -ofn "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.syr" 
+ngdbuild -intstyle ise -dd _ngo -sd ipcore_dir -nt timestamp -i -p xc3s500e-fg320-4 "Fetch.ngc" Fetch.ngd  
+map -intstyle ise -p xc3s500e-fg320-4 -cm area -ir off -pr off -c 100 -o Fetch_map.ncd Fetch.ngd Fetch.pcf 
+par -w -intstyle ise -ol high -t 1 Fetch_map.ncd Fetch.ncd Fetch.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml Fetch.twx Fetch.ncd -o Fetch.twr Fetch.pcf 
+bitgen -intstyle ise -f Fetch.ut Fetch.ncd 

@@ -1,4 +1,0 @@
-vhdl work "ipcore_dir/Instruction_Memory.vhd"
-vhdl work "Incrementer.vhd"
-vhdl work "GP_register.vhd"
-vhdl work "Fetch.vhd"

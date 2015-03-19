@@ -4,7 +4,7 @@
 -- 
 -- Create Date:    15:35:19 03/18/2015 
 -- Design Name: 
--- Module Name:    mux_7to1 - Behavioral 
+-- Module Name:    mux_5to1 - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,21 +29,19 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity mux_7to1 is
+entity mux_5to1 is
     Port ( A 		: in  STD_LOGIC_Vector(15 downto 0);
            B 		: in  STD_LOGIC_Vector(15 downto 0);
            C 		: in  STD_LOGIC_Vector(15 downto 0);
            D 		: in  STD_LOGIC_Vector(15 downto 0);
            E 		: in  STD_LOGIC_Vector(15 downto 0);
-           F 		: in  STD_LOGIC_Vector(15 downto 0);
-           G 		: in  STD_LOGIC_Vector(15 downto 0);
            SEL 	: in  STD_LOGIC_Vector(2 downto 0);
 			  EN 		: in 	STD_LOGIC;
            OUTP 	: out  STD_LOGIC_Vector(15 downto 0)
 			  );
-end mux_7to1;
+end mux_5to1;
 
-architecture Combinational of mux_7to1 is
+architecture Combinational of mux_5to1 is
 
 begin
 	process(EN) 
@@ -56,9 +54,7 @@ begin
 					when "001" =>OUTP<=B;		
 					when "010" =>OUTP<=C;
 					when "011" =>OUTP<=D;
-					when "100" =>OUTP<=E;
-					when "101" =>OUTP<=F;
-					when "110" =>OUTP<=G;
+					when "100" =>OUTP<=E;					
 					when others =>OUTP<=A;								
 					END CASE;
 				

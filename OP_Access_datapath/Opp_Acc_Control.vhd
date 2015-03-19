@@ -31,8 +31,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Opp_Acc_Control is
     Port ( State_Instruction : in  STD_LOGIC;
-           CNTLA_out : out  STD_LOGIC;
-           CNTLB_out : out  STD_LOGIC);
+           CNTLA_out : out  STD_LOGIC_VECTOR(2 downto 0) ;
+           CNTLB_out : out  STD_LOGIC
+			  );
 end Opp_Acc_Control;
 
 architecture Behavioral of Opp_Acc_Control is

@@ -78,7 +78,6 @@ begin
 	MUX_DEC: entity work.mux2to1
 	generic map(num_bits 	=> 8)
 	port map( 	CLK			=>	CLK,
-					RST			=>	RST,
 					IN_1			=>	a,
 					IN_2			=>	b,
 					O				=>	muxo,

@@ -32,36 +32,38 @@ use work.all;
 --use UNISIM.VComponents.all;
 
 entity Fetch is
-	Port ( CLK,RST : in STD_LOGIC;
-			 IMM: OUT STD_LOGIC_VECTOR (3 downto 0);
-			 RB: OUT STD_LOGIC_VECTOR (3 downto 0);
-			 RA: OUT STD_LOGIC_VECTOR (3 downto 0);
-			 OPCODE: OUT STD_LOGIC_VECTOR (3 downto 0));
+	Port ( CLK,RST : in STD_LOGIC; --Clock and Reset
+			 IMM: OUT STD_LOGIC_VECTOR (3 downto 0); --Immediate operand
+			 RB: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register B Address
+			 RA: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register A Address
+			 OPCODE: OUT STD_LOGIC_VECTOR (3 downto 0); -- Opcode Address
+			 INST : OUT STD_LOGIC_VECTOR (15 downto 0)); -- Instruction
 end Fetch;
 
 architecture Structural of Fetch is
 
-	signal INSTR: STD_LOGIC_VECTOR (15 downto 0);
+	signal INSTR: STD_LOGIC_VECTOR (15 downto 0); -- Wires connecting Instruction Memory to Instruction Register
 	signal PC_INDEX, INC_PC  : STD_LOGIC_VECTOR (13 downto 0);
 	
 begin
-	PC: entity work.GP_register
+INST <= INSTR; --Instruction output
+	PC: entity work.GP_register -- Program Counter Register
 	generic map (num_bits => 14)
 	port map( CLK => CLK,
 				 RST => RST,
 				 D => INC_PC,
 				 Q => PC_INDEX);
 				 
-	INC: entity work.Incrementer
+	INC: entity work.Incrementer -- Incrementer
 	port map( D => PC_INDEX,
 				 Q => INC_PC);
 	
-	INSTR_MEM: entity work.Instruction_Memory
+	INSTR_MEM: entity work.Instruction_Memory -- Block ROM for Instruction Memory
 	port map( clka => CLK,
 				 addra => PC_INDEX,
 				 douta => INSTR);
 				 
-	INSTRUCTION: entity work.GP_register
+	INSTRUCTION: entity work.GP_register -- Instruction Register
 	port map( CLK => CLK,
 				 RST => RST,
 				 D => INSTR,

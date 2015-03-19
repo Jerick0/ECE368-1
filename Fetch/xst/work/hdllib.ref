@@ -1,0 +1,8 @@
+EN instruction_memory NULL "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/ipcore_dir/Instruction_Memory.vhd" sub00/vhpl05 1426716213
+AR instruction_memory instruction_memory_a "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/ipcore_dir/Instruction_Memory.vhd" sub00/vhpl06 1426716214
+EN gp_register NULL "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/GP_register.vhd" sub00/vhpl02 1426716209
+AR gp_register behavioral "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/GP_register.vhd" sub00/vhpl03 1426716210
+AR fetch structural "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.vhd" sub00/vhpl07 1426716216
+AR incrementer behavioral "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Incrementer.vhd" sub00/vhpl04 1426716212
+EN fetch NULL "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Fetch.vhd" sub00/vhpl00 1426716215
+EN incrementer NULL "C:/Users/Fuck you Chris Souza/Desktop/ECE 368/Fetch/Incrementer.vhd" sub00/vhpl01 1426716211

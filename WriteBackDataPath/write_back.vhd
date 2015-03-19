@@ -33,7 +33,6 @@ entity write_back is
 			
 			-- control
 			clk				: in std_logic;			-- system clock
-			rst				: in std_logic;			-- reset line
 			sel				: in std_logic);			-- select line
 end write_back;
 
@@ -49,7 +48,6 @@ begin
 	
 	writeback_mux: entity work.mux2to1
 		port map( 	clk	=> clk,
-						rst	=> rst,
 						in_1	=> input_alu,
 						in_2	=> input_load,
 						o		=> o,

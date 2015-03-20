@@ -47,8 +47,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- Bits  3 -  0: Immediate
 
 entity Opp_Acc_Control is
+<<<<<<< HEAD
     Port ( OP_ACC, EXEC, WB, WBPLUS1 : in  STD_LOGIC_VECTOR (15 downto 0); -- Relevant Instructions from Instruction Register Bank
            CNTLA_out, CNTLB_out : out  STD_LOGIC_VECTOR (2 downto 0)); -- Control Lines for Operand Access Multiplexers
+=======
+    Port ( State_Instruction : in  STD_LOGIC;
+           CNTLA_out : out  STD_LOGIC_VECTOR(2 downto 0) ;
+           CNTLB_out : out  STD_LOGIC
+			  );
+>>>>>>> 69a2a8dd953e0266811455241bb6fc8fdbd72281
 end Opp_Acc_Control;
 
 architecture Behavioral of Opp_Acc_Control is

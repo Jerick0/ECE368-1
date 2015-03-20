@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    16:36:19 03/18/2015 
+-- Create Date:    14:28:25 03/19/2015 
 -- Design Name: 
--- Module Name:    Decode - Behavioral 
+-- Module Name:    decode - structural 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -19,111 +19,94 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use work.all;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+entity decode is
+	generic( num_bits		: integer:=16;		-- number of bits in a word
+				addr_size	: integer:=4;		-- addressing size of register bank
+				immediate_L	: integer:=8;		-- 8 bit immediate value, used for addressing data memory/andi & addi instrucitons
+				immediate_S	: integer:=4);		-- 4 bit immediate value, used for shifting
+	
+	port(	-- inputs for decode
+			addr_reg_a		: in std_logic_vector(addr_size-1 downto 0);		-- register bank address for operand a
+			addr_reg_b		: in std_logic_vector(addr_size-1 downto 0);		-- register bank address for operand b
+			immediate		: in std_logic_vector(immediate_L-1 downto 0);	-- immediate 8 bit value to be taken in, break up into separate immediate values
+			
+			-- inputs for writeback (the trailing edge of write back occurs in decode block)
+			--			inputs for write back will occur on falling edge of clock
+			store_addr		: in std_logic_vector(addr_size-1 downto 0);		-- address to store data into register bank from write back
+			store_data		: in std_logic_vector(num_bits-1 downto 0);		-- the data to be stored into register bank from writeback
+			
+			-- outputs
+			reg_a				: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand a
+			reg_b				: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand b
+			immediate_out	: out std_logic_vector(num_bits-1 downto 0);		-- immediate value needed for opcode (or garbage value)
+			wbPlusOne		: out std_logic_vector(num_bits-1 downto 0);		-- forwarded value provided to operand access
+			
+			-- control signals
+			store_enable	: in std_logic_vector(0 downto 0);					-- enable a store (disabled on a store word instruction
+			sel				: in std_logic;											-- selector for decode mux of immediate values
+			rst				: in std_logic;											-- reset line
+			clk				: in std_logic);											-- system clock
+end decode;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+architecture structural of decode is
+	-- immediate values
+	signal immediate_8	: std_logic_vector(immediate_L-1 downto 0) := (others => '0');		-- eight bit immediate value from input immediate
+	signal immediate_4	: std_logic_vector(immediate_L-1 downto 0) := (others => '0');		-- four bit immediate value from input
+	signal im_mux			: std_logic_vector(immediate_L-1 downto 0) := (others => '0');		-- output of immediate mux to immediate register
 
-entity Decode is
-    Port ( CLK 		: in  	STD_LOGIC;
-           RST 		: in  	STD_LOGIC;
-			  SEL			: in		STD_LOGIC;
-			  WE			: in		STD_LOGIC_VECTOR (0 downto 0);
-			  IMMED		: in		STD_LOGIC_VECTOR (3 downto 0);
-           REGA_IN 	: in  	STD_LOGIC_VECTOR (3 downto 0);
-           REGB_IN 	: in  	STD_LOGIC_VECTOR (3 downto 0);
-			  LOAD_EXFI : in		STD_LOGIC_VECTOR (15 downto 0);
-			  LOAD_WBFI : in		STD_LOGIC_VECTOR (15 downto 0);
-			  WB_FI 		: in		STD_LOGIC_VECTOR (15 downto 0);
-			  EX_FI 		: in		STD_LOGIC_VECTOR (15 downto 0);
-			  WB_ADDR 	: in		STD_LOGIC_VECTOR (3 downto 0);
-			  WB_MDAT 	: in		STD_LOGIC_VECTOR (15 downto 0);
-           REGA_OUT 	: out  	STD_LOGIC_VECTOR (15 downto 0);
-           REGB_OUT 	: out  	STD_LOGIC_VECTOR (15 downto 0);
-           LOAD_EXFO : out  	STD_LOGIC_VECTOR (15 downto 0);
-           LOAD_WBFO : out  	STD_LOGIC_VECTOR (15 downto 0);
-           WB_FO 		: out  	STD_LOGIC_VECTOR (15 downto 0);
-           EX_FO 		: out  	STD_LOGIC_VECTOR (15 downto 0);
-			  DEC_O		: out  	STD_LOGIC_VECTOR (15 downto 0));
-end Decode;
+	-- register bank outputs
+	signal reg_a_tmp		: std_logic_vector(num_bits-1 downto 0) := (others => '0');			-- value read out of register bank to store in register A
+	signal reg_b_tmp		: std_logic_vector(num_bits-1 downto 0) := (others => '0');			-- value read out of register bank to store in register B
 
-architecture Structural of Decode is
-	signal ra : STD_LOGIC_VECTOR(15 downto 0):= (others => '0');
-	signal rb : STD_LOGIC_VECTOR(15 downto 0):= (others => '0');
-	signal muxo : STD_LOGIC_VECTOR(7 downto 0):= (others => '0');
-	signal a : std_logic_vector(7 downto 0) := (others => '0');
-	signal b : std_logic_vector(7 downto 0) := (others => '0');
-	signal c : std_logic_vector(15 downto 0) := (others => '0');
 begin
+	-- connect immediate values to grab different possibilities
+	immediate_8 <= immediate;
+	immediate_4 <= "0000" & immediate(immediate_L-1 downto immediate_S);
+	immediate_out(num_bits-1 downto immediate_L)	<= "00000000";
 	
-	a <= "0000" & IMMED;
-	b <= REGB_IN & IMMED;
-	c <= "00000000" & muxo;
+	register_bank: entity work.reg_bank
+		port map(	reg_a_addr		=> addr_reg_a,
+						reg_b_addr		=> addr_reg_b,
+						write_addr		=> store_addr,
+						data_in			=> store_data,
+						reg_a				=> reg_a_tmp,
+						reg_b				=> reg_b_tmp,
+						w_en				=> store_enable,
+						clk				=> clk);
 	
-	U1: entity work.reg_bank
-	port map( 	clk			=>	CLK,
-					reg_a_addr	=>	REGA_IN,
-					reg_b_addr	=>	REGB_IN,
-					write_addr	=>	WB_ADDR,
-					data_in		=>	WB_MDAT,
-					reg_a			=>	ra,
-					reg_b			=>	rb,
-					w_en			=>	WE);
+	decode_mux:	entity work.mux2to1
+		generic map(num_bits			=> immediate_L)
+		port map(	clk				=> clk,
+						in_1				=> immediate_4,
+						in_2				=> immediate_8,
+						o					=> im_mux,
+						sel				=> sel);
 	
-	MUX_DEC: entity work.mux2to1
-	generic map(num_bits 	=> 8)
-	port map( 	CLK			=>	CLK,
-					IN_1			=>	a,
-					IN_2			=>	b,
-					O				=>	muxo,
-					SEL			=>	SEL);
-					
-					
-	Reg_DEC: entity work.GP_register
-	port map( 	CLK			=> CLK,
-					RST			=>	RST,
-					D				=>	c,
-					Q				=>	DEC_O);
-					
-	Reg_A: entity work.GP_register
-	port map( 	CLK			=>	CLK,
-					RST			=>	RST,
-					D				=>	ra,
-					Q				=>	REGA_OUT);
-					
-	Reg_B: entity work.GP_register
-	port map( 	CLK			=>	CLK,
-					RST			=>	RST,
-					D				=>	rb,
-					Q				=>	REGB_OUT);
-					
-	Reg_LEXF: entity work.GP_register
-	port map( 	CLK			=>	CLK,
-					RST			=>	RST,
-					D				=>	LOAD_EXFI,
-					Q				=>	LOAD_EXFO);
+	register_mux: entity work.GP_register
+		generic map(num_bits			=> immediate_L)
+		port map(	clk				=> clk,
+						rst				=> rst,
+						D					=> im_mux,
+						Q					=> immediate_out(immediate_L-1 downto 0));
 	
-	Reg_LWBF: entity work.GP_register
-	port map( 	CLK			=>	CLK,
-					RST			=>	RST,
-					D				=>	LOAD_WBFI,
-					Q				=>	LOAD_WBFO);
-					
-	Reg_WBF: entity work.GP_register
-	port map( 	CLK			=>	CLK,
-					RST			=>	RST,
-					D				=>	WB_FI,
-					Q				=>	WB_FO);
-					
-	Reg_EXF: entity work.GP_register
-	port map( 	CLK			=>	CLK,
-					RST			=>	RST,
-					D				=>	EX_FI,
-					Q				=>	EX_FO);
+	register_a: entity work.GP_register
+		port map(	clk				=> clk,
+						rst				=> rst,
+						D					=> reg_a_tmp,
+						Q					=> reg_a);
+						
+	register_b: entity work.GP_register
+		port map(	clk				=> clk,
+						rst				=> rst,
+						D					=> reg_b_tmp,
+						Q					=> reg_b);
+						
+	register_wbp1:	entity work.GP_register
+		port map(	clk				=> clk,
+						rst				=> rst,
+						D					=> store_data,
+						Q					=> wbPlusOne);
+end structural;
 
-end Structural;

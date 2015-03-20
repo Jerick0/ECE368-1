@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    22:24:01 03/19/2015 
+-- Create Date:    16:58:09 03/20/2015 
 -- Design Name: 
--- Module Name:    Instruction_bank - Behavioral 
+-- Module Name:    WB_controlpath - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,19 +29,26 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Instruction_bank is
-		port( fetch_instruction : in STD_LOGIC_VECTOR(15 downto 0);
-				D_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				O_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				E_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				W_inst				: out STD_LOGIC_VECTOR(15 downto 0)
-				);				
-				
-end Instruction_bank;
+entity WB_controlpath is
+    Port ( WB_inst : in  STD_LOGIC_Vector(15 downto 0);
+           Reg_Aval : out  STD_LOGIC_Vector(3 downto 0);
+           En_StoreData : out  STD_LOGIC_Vector(0 downto 0);
+           WB_mux : out  STD_LOGIC
+			  );
+end WB_controlpath;
 
-architecture Behavioral of Instruction_bank is
+architecture Behavioral of WB_controlpath is
 
 begin
+
+	Reg_Aval <= WB_inst(11 downto 8);
+	
+	En_StoreData <= (others => '0') when WB_inst(15 downto 12) = "1010"
+							else (others => '1');
+	
+	WB_mux <= '1' when WB_inst(15 downto 12) = "1001"
+						else '0';
+
 
 
 

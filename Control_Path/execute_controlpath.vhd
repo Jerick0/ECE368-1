@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    22:24:01 03/19/2015 
+-- Create Date:    16:55:52 03/20/2015 
 -- Design Name: 
--- Module Name:    Instruction_bank - Behavioral 
+-- Module Name:    execute_controlpath - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,21 +29,23 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Instruction_bank is
-		port( fetch_instruction : in STD_LOGIC_VECTOR(15 downto 0);
-				D_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				O_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				E_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				W_inst				: out STD_LOGIC_VECTOR(15 downto 0)
-				);				
-				
-end Instruction_bank;
+entity execute_controlpath is
+    Port ( E_inst : in  STD_LOGIC_Vector(15 downto 0);
+           opcode : out  STD_LOGIC_Vector(3 downto 0);
+           enable_SW : out  STD_LOGIC_Vector(0 downto 0)
+			  );
+end execute_controlpath;
 
-architecture Behavioral of Instruction_bank is
+architecture Behavioral of execute_controlpath is
 
 begin
-
-
-
+	
+	opcode <= E_inst(15 downto 12);
+	
+	enable_SW <= (others=>'1') when E_inst(15 downto 12) = "1010"
+					else (others=>'0');
+				
+			
+	
 end Behavioral;
 

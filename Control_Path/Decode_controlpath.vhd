@@ -31,8 +31,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 --  1 -> 8-bit Immediate
 
 entity Decode_controlpath is
+<<<<<<< HEAD
     Port ( D_inst : in  STD_LOGIC_VECTOR(15 downto 0); --Decode Instruction
            in_mux_sel : out  STD_LOGIC);
+=======
+    Port ( D_inst : in  STD_LOGIC_Vector(15 downto 0);
+           in_mux_sel : out  STD_LOGIC
+			  );
+>>>>>>> 39eb25aaaba1036e095e1c8739b5eca81d156b1a
 end Decode_controlpath;
 
 architecture Behavioral of Decode_controlpath is

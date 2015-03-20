@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    22:24:01 03/19/2015 
+-- Create Date:    12:22:38 03/17/2015 
 -- Design Name: 
--- Module Name:    Instruction_bank - Behavioral 
+-- Module Name:    GP_register - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,21 +29,26 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Instruction_bank is
-		port( fetch_instruction : in STD_LOGIC_VECTOR(15 downto 0);
-				D_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				O_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				E_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				W_inst				: out STD_LOGIC_VECTOR(15 downto 0)
-				);				
-				
-end Instruction_bank;
+entity GP_register is
+	generic(	num_bits		: integer:=16);
+	
+   port ( CLK 	: in  STD_LOGIC;
+          RST 	: in  STD_LOGIC;
+          D 	: in  STD_LOGIC_VECTOR(num_bits-1 downto 0);
+          Q 	: out  STD_LOGIC_VECTOR(num_bits-1 downto 0));
+end GP_register;
 
-architecture Behavioral of Instruction_bank is
+architecture Behavioral of GP_register is
 
 begin
 
-
-
+	Process(CLK, RST)
+	begin
+		if(RST = '1') then
+			Q <= (others =>'0');
+		elsif (CLK'event and CLK = '1') then
+			Q <= D;
+		end if;
+	end process;
 end Behavioral;
 

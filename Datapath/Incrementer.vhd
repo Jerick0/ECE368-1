@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    22:24:01 03/19/2015 
+-- Create Date:    17:29:07 03/18/2015 
 -- Design Name: 
--- Module Name:    Instruction_bank - Behavioral 
+-- Module Name:    Incrementer - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -19,6 +19,8 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -29,21 +31,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Instruction_bank is
-		port( fetch_instruction : in STD_LOGIC_VECTOR(15 downto 0);
-				D_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				O_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				E_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				W_inst				: out STD_LOGIC_VECTOR(15 downto 0)
-				);				
-				
-end Instruction_bank;
+entity Incrementer is
 
-architecture Behavioral of Instruction_bank is
+	port( D : in STD_LOGIC_VECTOR(13 downto 0);
+			Q : out STD_LOGIC_VECTOR(13 downto 0));
+end Incrementer;
 
+architecture Behavioral of Incrementer is
 begin
-
-
-
+	Q <= D + 1;
 end Behavioral;
 

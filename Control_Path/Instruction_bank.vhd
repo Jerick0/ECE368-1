@@ -34,7 +34,8 @@ entity Instruction_bank is
 				D_inst				: out STD_LOGIC_VECTOR(15 downto 0);
 				O_inst				: out STD_LOGIC_VECTOR(15 downto 0);
 				E_inst				: out STD_LOGIC_VECTOR(15 downto 0);
-				W_inst				: out STD_LOGIC_VECTOR(15 downto 0);				
+				W_inst				: out STD_LOGIC_VECTOR(15 downto 0)
+				);				
 				
 end Instruction_bank;
 

@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity WB_controlpath is
     Port ( WB_inst : in  STD_LOGIC_Vector(15 downto 0);
            Reg_Aval : out  STD_LOGIC_Vector(3 downto 0);
-           En_StoreData : out  STD_LOGIC;
+           En_StoreData : out  STD_LOGIC_Vector(0 downto 0);
            WB_mux : out  STD_LOGIC
 			  );
 end WB_controlpath;
@@ -40,6 +40,16 @@ end WB_controlpath;
 architecture Behavioral of WB_controlpath is
 
 begin
+
+	Reg_Aval <= WB_inst(11 downto 8);
+	
+	En_StoreData <= (others => '0') when WB_inst(15 downto 12) = "1010"
+							else (others => '1');
+	
+	WB_mux <= '1' when WB_inst(15 downto 12) = "1001"
+						else '0';
+
+
 
 
 end Behavioral;

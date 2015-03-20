@@ -34,11 +34,11 @@ entity control_toplayer is
            CLK : in  STD_LOGIC;
            Rst : in  STD_LOGIC;
            e_opcode : out  STD_LOGIC_Vector(3 downto 0);
-           e_sw_enable : out  STD_LOGIC;
+           e_sw_enable : out  STD_LOGIC_vector(0 downto 0);
            o_opA_muxsel : out  STD_LOGIC_vector(2 downto 0);
            o_opB_muxsel : out  STD_LOGIC;
            WB_reg_addr : out  STD_LOGIC_Vector(3 downto 0);
-           WB_sd_enable : out  STD_LOGIC;
+           WB_sd_enable : out  STD_LOGIC_Vector(0 downto 0);
            d_in_mux_sel : out  STD_LOGIC;
            wb_datamux_sel : out  STD_LOGIC;
            instruction_wb : out  STD_LOGIC);

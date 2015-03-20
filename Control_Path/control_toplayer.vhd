@@ -46,7 +46,16 @@ end control_toplayer;
 
 architecture Structural of control_toplayer is
 
+signal fetch_instruction : STD_LOGIC_VECTOR(15 downto 0);
+signal D_inst				 : STD_LOGIC_VECTOR(15 downto 0);
+signal O_inst				 : STD_LOGIC_VECTOR(15 downto 0);
+signal E_inst				 : STD_LOGIC_VECTOR(15 downto 0);
+signal W_inst				 : STD_LOGIC_VECTOR(15 downto 0);
+
 begin
+
+
+
 
 
 end Structural;

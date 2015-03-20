@@ -1,8 +1,0 @@
-INTSTYLE=ise
-INFILE=C:\Users\Fuck you Chris Souza\Desktop\ECE 368\Fetch\Fetch.ncd
-OUTFILE=C:\Users\Fuck you Chris Souza\Desktop\ECE 368\Fetch\Fetch.bit
-FAMILY=Spartan3E
-PART=xc3s500e-4fg320
-WORKINGDIR=C:\Users\Fuck you Chris Souza\Desktop\ECE 368\Fetch
-LICENSE=WebPack
-USER_INFO=211002995_0_0_478

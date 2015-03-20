@@ -55,15 +55,15 @@ architecture Behavioral of Opp_Acc_Control is
 
 begin
 	--MUX A - Control Logic
-	if ((OP_ACC(11 downto 8) = EXEC(11 downto 8)) and (EXEC(15 downto 12) = '1001')) then CNTRLA_out <= '001'; -- Selects Load Word Execute
+	if ((EXEC(15 downto 12) = '1001') and (OP_ACC(11 downto 8) = EXEC(11 downto 8))) then CNTRLA_out <= '001'; -- Selects Load Word Execute
 		
-		elsif ((OP_ACC(11 downto 8) = WB(11 downto 8)) then CNTLA_out <= '011'; -- Selects Register Register Execute
+		elsif ((OP_ACC(11 downto 8) = EXEC(11 downto 8)) then CNTLA_out <= '011'; -- Selects Register Register Execute
 		
 		elsif ((OP_ACC(11 downto 8) = WB(11 downto 8))) then CNTLA_out <= '010'; -- Selects Write Back
 	
 		elsif (OP_ACC(11 downto 8) = WBPLUS1(11 downto 8) then CNTLA_out <= '100'; -- Selects Write Back + 1
 	
-		else CNTLB_out <= '000'; -- Selects Register B
+		else CNTLA_out <= '000'; -- Selects Register A
 		
 	end
 	-- MUX B - Control Logic
@@ -72,7 +72,7 @@ begin
 	
 		elsif ((EXEC(15 downto 12) = '1001') and (OP_ACC(7 downto 4) = EXEC(11 downto 8))) then CNTLB_out <= '010'; -- Selects Load Word Execute
 		
-		elsif ((OP_ACC(7 downto 4) = WB(11 downto 8)) then CNTLB_out <= '100'; -- Selects Register Register Execute
+		elsif ((OP_ACC(7 downto 4) = EXEC(11 downto 8)) then CNTLB_out <= '100'; -- Selects Register Register Execute
 		
 		elsif ((OP_ACC(7 downto 4) = WB(11 downto 8))) then CNTLB_out <= '011'; -- Selects Write Back
 	

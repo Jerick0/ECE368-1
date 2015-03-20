@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    14:46:06 03/18/2015 
+-- Create Date:    16:55:52 03/20/2015 
 -- Design Name: 
--- Module Name:    Opp_Acc_Control - Behavioral 
+-- Module Name:    execute_controlpath - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,14 +29,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Opp_Acc_Control is
-    Port ( O_inst : in  STD_LOGIC_Vector(15 downto 0);
-           CNTLA_out : out  STD_LOGIC_VECTOR(2 downto 0) ;
-           CNTLB_out : out  STD_LOGIC
+entity execute_controlpath is
+    Port ( E_inst : in  STD_LOGIC_Vector(15 downto 0);
+           opcode : out  STD_LOGIC_Vector(3 downto 0);
+           enable_SW : out  STD_LOGIC
 			  );
-end Opp_Acc_Control;
+end execute_controlpath;
 
-architecture Behavioral of Opp_Acc_Control is
+architecture Behavioral of execute_controlpath is
 
 begin
 

@@ -30,8 +30,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Decode_controlpath is
-    Port ( D_inst : in  STD_LOGIC;
-           in_mux_sel : out  STD_LOGIC);
+    Port ( D_inst : in  STD_LOGIC_Vector(15 downto 0);
+           in_mux_sel : out  STD_LOGIC
+			  );
 end Decode_controlpath;
 
 architecture Behavioral of Decode_controlpath is

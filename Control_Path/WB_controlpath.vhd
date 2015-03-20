@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    14:46:06 03/18/2015 
+-- Create Date:    16:58:09 03/20/2015 
 -- Design Name: 
--- Module Name:    Opp_Acc_Control - Behavioral 
+-- Module Name:    WB_controlpath - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,14 +29,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Opp_Acc_Control is
-    Port ( O_inst : in  STD_LOGIC_Vector(15 downto 0);
-           CNTLA_out : out  STD_LOGIC_VECTOR(2 downto 0) ;
-           CNTLB_out : out  STD_LOGIC
+entity WB_controlpath is
+    Port ( WB_inst : in  STD_LOGIC_Vector(15 downto 0);
+           Reg_Aval : out  STD_LOGIC_Vector(3 downto 0);
+           En_StoreData : out  STD_LOGIC;
+           WB_mux : out  STD_LOGIC
 			  );
-end Opp_Acc_Control;
+end WB_controlpath;
 
-architecture Behavioral of Opp_Acc_Control is
+architecture Behavioral of WB_controlpath is
 
 begin
 

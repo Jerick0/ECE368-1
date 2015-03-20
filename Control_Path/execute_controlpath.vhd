@@ -32,14 +32,20 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity execute_controlpath is
     Port ( E_inst : in  STD_LOGIC_Vector(15 downto 0);
            opcode : out  STD_LOGIC_Vector(3 downto 0);
-           enable_SW : out  STD_LOGIC
+           enable_SW : out  STD_LOGIC_Vector(0 downto 0)
 			  );
 end execute_controlpath;
 
 architecture Behavioral of execute_controlpath is
 
 begin
-
-
+	
+	opcode <= E_inst(15 downto 12);
+	
+	enable_SW <= (others=>'1') when E_inst(15 downto 12) = "1010"
+					else (others=>'0');
+				
+			
+	
 end Behavioral;
 

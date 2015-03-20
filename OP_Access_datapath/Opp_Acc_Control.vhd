@@ -72,7 +72,7 @@ begin
 	
 		else CNTLA_out <= '000'; -- Selects Register A
 		
-	end
+	end if;
 	-- MUX B - Control Logic
 	if ((OP_ACC(15 downto 12) = '0101') | (OP_ACC(15 downto 12) = '0110') | (OP_ACC(15 downto 12) = '0111') | (OP_ACC(15 downto 12) = '1000') | 
 	(OP_ACC(15 downto 12) = '1001') | (OP_ACC(15 downto 12) = '1010')) then CNTLB_out <= '000'; -- Selects Immediate
@@ -86,7 +86,7 @@ begin
 		elsif (OP_ACC(7 downto 4) = WBPLUS1(11 downto 8) then CNTLB_out <= '101'; -- Selects Write Back + 1
 	
 		else CNTLB_out <= '001'; -- Selects Register B
-	end
+	end if;
 
 end Behavioral;
 

@@ -1,26 +1,21 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    11:45:55 03/14/2015 
--- Design Name: 
+-- Create Date:    22:02:42 03/12/2015  
 -- Module Name:    reg_bank - behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
+-- Project Name: 	 umd risc machine
+-- Description:    register bank is a collection of 16 registers
+--						 on the rising edge of the clock the bank reads 
+--									from two registers
+--						 on the falling edge of the clock the bank writes
+--									to a register if enabled
 --
 -- Revision: 
 -- Revision 0.01 - File Created
 -- Additional Comments: 
 --
 ----------------------------------------------------------------------------------
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-use work.all;
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 entity reg_bank is
 	generic(	num_reg	 : integer:= 16;	-- number of registers
@@ -40,38 +35,37 @@ entity reg_bank is
 			reg_b		:		out std_logic_vector(num_bits-1 downto 0);	-- data read from register b
 			
 			-- control signals
-			w_en		:		in std_logic_vector(0 downto 0);	-- write enable, since block ram is a vector, must be vector
-			clk		:		in std_logic);							-- system clock
-
+			rst		:		in std_logic;											-- universal reset
+			w_en		:		in std_logic_vector(0 downto 0);					-- write enable
+			clk 		:		in std_logic);											-- system clock, used on rising edge
 end reg_bank;
 
 architecture behavioral of reg_bank is
-	signal clk_write, clk_read	: std_logic;
-
-begin
-	clk_write 	<= not clk;		-- write is done on falling edge (block ram is triggered on rising edge)
-	clk_read		<= clk;			-- read is done on rising edge
+	-- create an array of num_reg each num_bits wide
+	type regs_type is array(0 to num_reg-1) of std_logic_vector(num_bits-1 downto 0);
+	signal reg_collection : regs_type := (others => (others => '0'));
 	
-	-- instantiate two block rams to operate in parallel as follows:
-	--			ram_a reads out to register a
-	--			ram_b reads out to register b
-	--			the same write occurs to both reigsters to ensure the same data
-	ram_a: entity work.reg_bank_ram
-		port map(	clka 	=> clk_write,
-						wea	=> w_en,
-						addra	=> write_addr,
-						dina	=> data_in,
-						clkb	=> clk_read,
-						addrb	=>	reg_a_addr,
-						doutb	=>	reg_a);
+begin
 
-	ram_b: entity work.reg_bank_ram
-		port map(	clka 	=> clk_write,
-						wea	=> w_en,
-						addra	=> write_addr,
-						dina	=> data_in,
-						clkb	=> clk_read,
-						addrb	=>	reg_b_addr,
-						doutb	=>	reg_b);
+	-- perform a write
+	process(clk)
+	begin
+		if (clk'event and clk = '0') then    	-- on the falling edge
+			if (rst = '1') then
+				reg_collection <= (others => (others => '0'));
+			elsif(w_en(0) = '1') then																-- if a write is being enabled
+				reg_collection(to_integer(unsigned(write_addr))) <= data_in;	-- write to the register being addressed
+			end if;
+		end if;
+	end process;
+	
+	-- perform a read
+	process(clk)
+	begin
+		if (clk'event and clk = '1') then 		-- on the rigsing edge
+				reg_a <= reg_collection(to_integer(unsigned(reg_a_addr)));		
+				reg_b <= reg_collection(to_integer(unsigned(reg_b_addr)));
+		end if;
+	end process;
+	
 end behavioral;
-

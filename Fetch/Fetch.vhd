@@ -36,7 +36,6 @@ entity Fetch is
 			 IMM: OUT STD_LOGIC_VECTOR (3 downto 0); --Immediate operand
 			 RB: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register B Address
 			 RA: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register A Address
-			 OPCODE: OUT STD_LOGIC_VECTOR (3 downto 0); -- Opcode Address
 			 ProgC : OUT STD_LOGIC_VECTOR (13 downto 0);
 			 INST : OUT STD_LOGIC_VECTOR (15 downto 0)); -- Instruction
 end Fetch;
@@ -66,10 +65,10 @@ ProgC <= PC_INDEX; -- Program Counter Output
 				 douta => INSTR);
 				 
 	INSTRUCTION: entity work.GP_register -- Instruction Register
+	generic map (num_bits => 12)
 	port map( CLK => CLK,
 				 RST => RST,
-				 D => INSTR,
-				 Q(15 downto 12)=> OPCODE,
+				 D => INSTR(11 downto 0),
 				 Q(11 downto 8) => RA,
 				 Q(7 downto 4) => RB,
 				 Q(3 downto 0) => IMM);

@@ -24,6 +24,7 @@ use work.all;
 entity datapath is
 	generic(	num_bits			: integer:=16;			-- number of bits to a word
 				instruct_size	: integer:=16;			-- size of an instruction
+				pc_size			: integer:=14;
 				immediate_L		: integer:=8;
 				immediate_S		: integer:=4;
 				ccr_size			: integer:=4;
@@ -53,8 +54,10 @@ entity datapath is
 			wb_reg_addr			: in std_logic_vector(addr_size-1 downto 0);
 			
 			-- outputs
+			pc						: out std_logic_vector(pc_size-1 downto 0);
 			instruction_fetch	: out std_logic_vector(instruct_size-1 downto 0);
 			wb_result			: out std_logic_vector(num_bits-1 downto 0);
+			ccr_result			: out std_logic_vector(ccr_size-1 downto 0);
 			store_result		: out std_logic_vector(num_bits-1 downto 0);
 			store_offset		: out std_logic_vector(immediate_L-1 downto 0));
 			
@@ -62,7 +65,6 @@ end datapath;
 
 architecture structural of datapath is
 	-- signals between fetch and decode
-	signal opC_tmp	: std_logic_vector(addr_size-1 downto 0);
 	signal reg_a	: std_logic_vector(addr_size-1 downto 0);
 	signal reg_b	: std_logic_vector(addr_size-1 downto 0);
 	signal im_S		: std_logic_vector(immediate_S-1 downto 0);
@@ -87,7 +89,6 @@ architecture structural of datapath is
 	-- signals between execute and writeback
 	signal alu_out		: std_logic_vector(num_bits-1 downto 0);
 	signal load_out	: std_logic_vector(num_bits-1 downto 0);
-	signal ccr_tmp		: std_logic_vector(ccr_size-1 downto 0);
 	
 	-- signals between write back and decode
 	--			Also needs to go to operand access
@@ -109,7 +110,7 @@ begin
 						imm				=> im_S,
 						rb					=> reg_b,
 						ra					=> reg_a,
-						opcode			=> opC_tmp,
+						progC				=> pc,
 						inst				=> instruction_fetch);
 	
 	---------------------------------------------------------------
@@ -154,7 +155,7 @@ begin
 						result_forward	=> rr_ex,
 						load				=> load_out,
 						load_forward	=> lw_ex,
-						ccr				=> ccr_tmp,
+						ccr				=> ccr_result,
 						op_code			=> e_opcode,
 						store_en			=> e_sw_enable,
 						rst				=> rst,

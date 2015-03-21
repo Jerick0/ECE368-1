@@ -73,6 +73,7 @@ begin
 						data_in			=> store_data,
 						reg_a				=> reg_a_tmp,
 						reg_b				=> reg_b_tmp,
+						rst				=> rst,
 						w_en				=> store_enable,
 						clk				=> clk);
 	

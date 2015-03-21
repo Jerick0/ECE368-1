@@ -21,7 +21,8 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity instruction_bank is
-	generic(	instruct_size		: integer:=16);
+	generic(	instruct_size		: integer:=16;			-- size of one instruction
+				num_instruct		: integer:=20);		-- number of instructions
 	
 	port(	-- inputs
 			instruction		: in std_logic_vector(instruct_size-1 downto 0);

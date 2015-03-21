@@ -17,10 +17,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 use work.all;
 
 entity buttoncontrol is
-    Port ( CLK     : in  STD_LOGIC;
-           SW      : in  STD_LOGIC;
-           BTN  : in  STD_LOGIC_VECTOR (3 downto 0);
-           LED : out STD_LOGIC_VECTOR (3 downto 0));
+    Port ( CLK    : in  STD_LOGIC;
+           BTN  	: in  STD_LOGIC_VECTOR;
+           LED 	: out STD_LOGIC_VECTOR (4 downto 0));
 end buttoncontrol;
 
 architecture Structural of buttoncontrol is
@@ -28,27 +27,10 @@ architecture Structural of buttoncontrol is
 begin
 
     ----- Structural Components: -----
-    BTN_0: entity work.debounce
+    BTN: entity work.debounce
     port map( CLK    => CLK,
-              INPUT  => BTN(0),
-              OUTPUT => LED(0));
-
-    BTN_1: entity work.debounce
-    port map( CLK    => CLK,
-              INPUT  => BTN(1),
-              OUTPUT => LED(1));
-
-    BTN_2: entity work.debounce
-    port map( CLK    => CLK,
-              INPUT  => BTN(2),
-              OUTPUT => LED(2));
-
-    BTN_3: entity work.debounce
-    port map( CLK    => CLK,
-              INPUT  => BTN(3),
-              OUTPUT => LED(3));
-
-    
+              INPUT  => BTN,
+              OUTPUT => LED);    
     ----- End Structural Components -----
 
 end Structural;

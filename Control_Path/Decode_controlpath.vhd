@@ -33,16 +33,41 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity Decode_controlpath is
 
     Port ( D_inst : in  STD_LOGIC_VECTOR(15 downto 0); --Decode Instruction
-           in_mux_sel : out  STD_LOGIC);
+				D_instout	: out STD_LOGIC_VECTOR(15 downto 0);
+				CLK			: in STD_LOGIC;
+				NOTCLK		: in STD_LOGIC;
+           in_mux_sel 	: out  STD_LOGIC);
 end Decode_controlpath;
 
 architecture Behavioral of Decode_controlpath is
+Signal DR_inst		: STD_LOGIC_VECTOR(15 downto 0);
+Signal DF_inst		:  STD_LOGIC_VECTOR(15 downto 0);
+
 begin
-process(D_inst)
+
+D_R		: entity work.GP_register
+			Port Map ( 	CLK 	=> CLK,
+							D   	=> D_inst,
+							Q	 	=> DR_inst,
+							Rst	=> '0'
+							);
+							
+D_F		: entity work.GP_register
+			Port Map (	CLK 	=> NotCLK,
+							D		=> DR_inst,
+							Q		=> DF_inst,
+							RST	=> '0'
+							);
+D_instout <= DF_inst;
+
+process(CLK)
 begin
-	if((D_inst(15 downto 12) = "0111") or (D_inst(15 downto 12) = "1000")) then in_mux_sel <= '0'; -- Selects 4-bit Immediate
-	else in_mux_sel <= '0'; -- Otherwise selects 8-bit Immediate
+	if(CLK'event and CLK='1') then
+		if((DR_inst(15 downto 12) = "0111") or (DR_inst(15 downto 12) = "1000")) then in_mux_sel <= '1'; -- Selects 4-bit Immediate
+		else in_mux_sel <= '0'; -- Otherwise selects 8-bit Immediate
+		end if;
 	end if;
+			
 end process;
 end Behavioral;
 

@@ -47,47 +47,41 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- Bits  3 -  0: Immediate
 
 entity Opp_Acc_Control is
-<<<<<<< HEAD
 
-    Port ( OP_ACC, EXEC, WB, WBPLUS1 : in  STD_LOGIC_VECTOR (15 downto 0); -- Relevant Instructions from Instruction Register Bank
+    Port ( O_inst, EXEC, WB, WBPLUS1 : in  STD_LOGIC_VECTOR (15 downto 0); -- Relevant Instructions from Instruction Register Bank
            CNTLA_out, CNTLB_out : out  STD_LOGIC_VECTOR (2 downto 0)); -- Control Lines for Operand Access Multiplexers
 
-=======
-    Port ( O_inst : in  STD_LOGIC_Vector(15 downto 0);
-           CNTLA_out : out  STD_LOGIC_VECTOR(2 downto 0) ;
-           CNTLB_out : out  STD_LOGIC
-			  );
->>>>>>> 39eb25aaaba1036e095e1c8739b5eca81d156b1a
+
 end Opp_Acc_Control;
 
 architecture Behavioral of Opp_Acc_Control is
 
 begin
-	process (OP_ACC, EXEC, WB, WBPLUS1)
+	process (O_inst, EXEC, WB, WBPLUS1)
 	begin
 	--MUX A - Control Logic
-		if ((EXEC(15 downto 12) = "1001") and (OP_ACC(11 downto 8) = EXEC(11 downto 8))) then CNTLA_out <= "001"; -- Selects Load Word Execute
+		if EXEC(15 downto 12) = "1001" and O_inst(11 downto 8) = EXEC(11 downto 8) then CNTLA_out <= "001"; -- Selects Load Word Execute
 			
-			elsif (OP_ACC(11 downto 8) = EXEC(11 downto 8)) then CNTLA_out <= "011"; -- Selects Register Register Execute
+			elsif O_inst(11 downto 8) = EXEC(11 downto 8) then CNTLA_out <= "011"; -- Selects Register Register Execute
 			
-			elsif (OP_ACC(11 downto 8) = WB(11 downto 8)) then CNTLA_out <= "010"; -- Selects Write Back
+			elsif O_inst (11 downto 8) = WB(11 downto 8) then CNTLA_out <= "010"; -- Selects Write Back
 		
-			elsif (OP_ACC(11 downto 8) = WBPLUS1(11 downto 8)) then CNTLA_out <= "100"; -- Selects Write Back + 1
+			elsif O_inst(11 downto 8) = WBPLUS1(11 downto 8) then CNTLA_out <= "100"; -- Selects Write Back + 1
 		
 			else CNTLA_out <= "000"; -- Selects Register A
 			
 		end if;
 		-- MUX B - Control Logic
-		if ((OP_ACC(15 downto 12) = "0101") or (OP_ACC(15 downto 12) = "0110") or (OP_ACC(15 downto 12) = "0111") or (OP_ACC(15 downto 12) = "1000") or 
-		(OP_ACC(15 downto 12) = "1001") or (OP_ACC(15 downto 12) = "1010")) then CNTLB_out <= "000"; -- Selects Immediate
+		if O_inst(15 downto 12) = "0101" or O_inst(15 downto 12) = "0110" or O_inst(15 downto 12) = "0111" or O_inst(15 downto 12) = "1000" or 
+		O_inst(15 downto 12) = "1001" or O_inst(15 downto 12) = "1010" then CNTLB_out <= "000"; -- Selects Immediate
 		
-			elsif ((EXEC(15 downto 12) = "1001") and (OP_ACC(7 downto 4) = EXEC(11 downto 8))) then CNTLB_out <= "010"; -- Selects Load Word Execute
+			elsif EXEC(15 downto 12) = "1001" and O_inst(7 downto 4) = EXEC(11 downto 8) then CNTLB_out <= "010"; -- Selects Load Word Execute
 			
-			elsif (OP_ACC(7 downto 4) = EXEC(11 downto 8)) then CNTLB_out <= "100"; -- Selects Register Register Execute
+			elsif O_inst(7 downto 4) = EXEC(11 downto 8) then CNTLB_out <= "100"; -- Selects Register Register Execute
 			
-			elsif (OP_ACC(7 downto 4) = WB(11 downto 8)) then CNTLB_out <= "011"; -- Selects Write Back
+			elsif O_inst(7 downto 4) = WB(11 downto 8) then CNTLB_out <= "011"; -- Selects Write Back
 		
-			elsif (OP_ACC(7 downto 4) = WBPLUS1(11 downto 8)) then CNTLB_out <= "101"; -- Selects Write Back + 1
+			elsif O_inst(7 downto 4) = WBPLUS1(11 downto 8) then CNTLB_out <= "101"; -- Selects Write Back + 1
 		
 			else CNTLB_out <= "001"; -- Selects Register B
 		end if;

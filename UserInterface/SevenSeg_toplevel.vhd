@@ -22,7 +22,6 @@ entity SSeg_toplevel is
 	
    port(	CLK 		: in  STD_LOGIC; -- 50 MHz input
 			RESULT  	: in  STD_LOGIC_VECTOR (num_bits-1 downto 0);
-			BTN 		: in  STD_LOGIC;
 			SEG 		: out STD_LOGIC_VECTOR (6 downto 0);
 			DP  		: out STD_LOGIC;
 			AN  		: out STD_LOGIC_VECTOR (3 downto 0));
@@ -33,13 +32,14 @@ architecture Structural of SSeg_toplevel is
     signal enl : STD_LOGIC := '1';
     signal dpc : STD_LOGIC_VECTOR (3 downto 0) := "1111";
     signal cen : STD_LOGIC := '0';
+	 signal off : std_logic;
 
 begin
-
+	off <= '0';
     ----- Structural Components: -----
     SSeg: entity work.SSegDriver
     port map( CLK     => CLK,
-              RST     => BTN,
+              RST     => off,
               EN      => enl,
               SEG_0   => RESULT(3 downto 0),
               SEG_1   => RESULT(7 downto 4),

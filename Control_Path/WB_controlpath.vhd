@@ -31,23 +31,57 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity WB_controlpath is
     Port ( WB_inst : in  STD_LOGIC_Vector(15 downto 0);
+			  WB_instout : out  STD_LOGIC_Vector(15 downto 0);
            Reg_Aval : out  STD_LOGIC_Vector(3 downto 0);
            En_StoreData : out  STD_LOGIC_Vector(0 downto 0);
-           WB_mux : out  STD_LOGIC
+           WB_mux : out  STD_LOGIC;
+			  CLK		:	in STD_LOGIC;
+			  NotCLK	: 	in STD_LOGIC
 			  );
 end WB_controlpath;
 
 architecture Behavioral of WB_controlpath is
+Signal WR_inst : STD_LOGIC_VECTOR( 15 downto 0);
+Signal WF_inst : STD_LOGIC_VECTOR(15 downto 0);
 
 begin
 
-	Reg_Aval <= WB_inst(11 downto 8);
-	
-	En_StoreData <= (others => '0') when WB_inst(15 downto 12) = "1010"
-							else (others => '1');
-	
-	WB_mux <= '1' when WB_inst(15 downto 12) = "1001"
-						else '0';
+W_R		: entity work.GP_register
+			Port Map ( 	CLK 	=> CLK,
+							D   	=> WB_inst,
+							Q	 	=> WR_inst,
+							Rst	=> '0'
+							);
+							
+W_F		: entity work.GP_register
+			Port Map (	CLK 	=> NotCLK,
+							D		=> WR_inst,
+							Q		=> WF_inst,
+							RST	=> '0'
+							);
+							
+WB_instout <= WF_inst;
+
+Process(CLK)
+Begin
+		if (CLK'event and CLK='1')then
+		
+			Reg_Aval <= WR_inst(11 downto 8);
+			
+			if WR_inst(15 downto 12) = "1001" then WB_mux <= '1';
+			else WB_mux <='0';
+			end if;
+		end if;
+end process;
+
+Process(CLK)
+Begin
+		if (CLK'event and CLK='0')then
+			if WF_inst(15 downto 12) = "1010" then En_StoreData <= (others => '0');
+				else EN_StoreData <=(others => '1');
+			end if;
+		end if;
+end process;
 
 
 

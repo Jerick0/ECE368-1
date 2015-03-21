@@ -48,43 +48,67 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Opp_Acc_Control is
 
-    Port ( O_inst, EXEC, WB, WBPLUS1 : in  STD_LOGIC_VECTOR (15 downto 0); -- Relevant Instructions from Instruction Register Bank
-           CNTLA_out, CNTLB_out : out  STD_LOGIC_VECTOR (2 downto 0)); -- Control Lines for Operand Access Multiplexers
-
+ Port ( O_inst, EXEC, WB, WBPLUS1	: in  STD_LOGIC_VECTOR (15 downto 0); -- Relevant Instructions from Instruction Register Bank
+           CNTLA_out, CNTLB_out 		: out  STD_LOGIC_VECTOR (2 downto 0); -- Control Lines for Operand Access Multiplexers
+			  O_instout 					: out  STD_LOGIC_VECTOR (15 downto 0);
+				CLK							:	in STD_LOGIC;
+			  NotCLK							: 	in STD_LOGIC
+			  );
 
 end Opp_Acc_Control;
 
 architecture Behavioral of Opp_Acc_Control is
 
+signal OR_inst : STD_LOGIC_VECTOR(15 downto 0);
+signal OF_inst : STD_LOGIC_VECTOr(15 downto 0);
+
 begin
-	process (O_inst, EXEC, WB, WBPLUS1)
+O_R		: entity work.GP_register
+			Port Map ( 	CLK 	=> CLK,
+							D   	=> O_inst,
+							Q	 	=> OR_inst,
+							Rst	=> '0'
+							);
+							
+O_F		: entity work.GP_register
+			Port Map (	CLK 	=> NotCLK,
+							D		=> OR_inst,
+							Q		=> OF_INST,
+							RST	=> '0'
+							);
+O_instout <= OF_inst;
+ 
+	process (CLK)
 	begin
-	--MUX A - Control Logic
-		if EXEC(15 downto 12) = "1001" and O_inst(11 downto 8) = EXEC(11 downto 8) then CNTLA_out <= "001"; -- Selects Load Word Execute
-			
-			elsif O_inst(11 downto 8) = EXEC(11 downto 8) then CNTLA_out <= "011"; -- Selects Register Register Execute
-			
-			elsif O_inst (11 downto 8) = WB(11 downto 8) then CNTLA_out <= "010"; -- Selects Write Back
-		
-			elsif O_inst(11 downto 8) = WBPLUS1(11 downto 8) then CNTLA_out <= "100"; -- Selects Write Back + 1
-		
-			else CNTLA_out <= "000"; -- Selects Register A
-			
-		end if;
-		-- MUX B - Control Logic
-		if O_inst(15 downto 12) = "0101" or O_inst(15 downto 12) = "0110" or O_inst(15 downto 12) = "0111" or O_inst(15 downto 12) = "1000" or 
-		O_inst(15 downto 12) = "1001" or O_inst(15 downto 12) = "1010" then CNTLB_out <= "000"; -- Selects Immediate
-		
-			elsif EXEC(15 downto 12) = "1001" and O_inst(7 downto 4) = EXEC(11 downto 8) then CNTLB_out <= "010"; -- Selects Load Word Execute
-			
-			elsif O_inst(7 downto 4) = EXEC(11 downto 8) then CNTLB_out <= "100"; -- Selects Register Register Execute
-			
-			elsif O_inst(7 downto 4) = WB(11 downto 8) then CNTLB_out <= "011"; -- Selects Write Back
-		
-			elsif O_inst(7 downto 4) = WBPLUS1(11 downto 8) then CNTLB_out <= "101"; -- Selects Write Back + 1
-		
-			else CNTLB_out <= "001"; -- Selects Register B
-		end if;
+	if (CLK'event and CLK ='0')then
+										--MUX A - Control Logic
+				if EXEC(15 downto 12) = "1001" and OF_inst(11 downto 8) = EXEC(11 downto 8) then CNTLA_out <= "001"; -- Selects Load Word Execute
+					
+					elsif OF_inst(11 downto 8) = EXEC(11 downto 8) then CNTLA_out <= "011"; -- Selects Register Register Execute
+					
+					elsif OF_inst (11 downto 8) = WB(11 downto 8) then CNTLA_out <= "010"; -- Selects Write Back
+				
+					elsif OF_inst(11 downto 8) = WBPLUS1(11 downto 8) then CNTLA_out <= "100"; -- Selects Write Back + 1
+				
+					else CNTLA_out <= "000"; -- Selects Register A
+					
+				end if;
+	
+										-- MUX B - Control Logic
+				if OF_inst(15 downto 12) = "0101" or OF_inst(15 downto 12) = "0110" or OF_inst(15 downto 12) = "0111" or OF_inst(15 downto 12) = "1000" or 
+				OF_inst(15 downto 12) = "1001" or OF_inst(15 downto 12) = "1010" then CNTLB_out <= "000"; -- Selects Immediate
+				
+					elsif EXEC(15 downto 12) = "1001" and OF_inst(7 downto 4) = EXEC(11 downto 8) then CNTLB_out <= "010"; -- Selects Load Word Execute
+					
+					elsif OF_inst(7 downto 4) = EXEC(11 downto 8) then CNTLB_out <= "100"; -- Selects Register Register Execute
+					
+					elsif OF_inst(7 downto 4) = WB(11 downto 8) then CNTLB_out <= "011"; -- Selects Write Back
+				
+					elsif OF_inst(7 downto 4) = WBPLUS1(11 downto 8) then CNTLB_out <= "101"; -- Selects Write Back + 1
+				
+					else CNTLB_out <= "001"; -- Selects Register B
+				end if;
+	end if;
 	end process;
 end Behavioral;
 

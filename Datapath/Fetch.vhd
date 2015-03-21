@@ -37,6 +37,7 @@ entity Fetch is
 			 RB: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register B Address
 			 RA: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register A Address
 			 OPCODE: OUT STD_LOGIC_VECTOR (3 downto 0); -- Opcode Address
+			 ProgC : OUT STD_LOGIC_VECTOR (13 downto 0);
 			 INST : OUT STD_LOGIC_VECTOR (15 downto 0)); -- Instruction
 end Fetch;
 
@@ -47,6 +48,7 @@ architecture Structural of Fetch is
 	
 begin
 INST <= INSTR; --Instruction output
+ProgC <= PC_INDEX; -- Program Counter Output
 	PC: entity work.GP_register -- Program Counter Register
 	generic map (num_bits => 14)
 	port map( CLK => CLK,

@@ -36,7 +36,7 @@ entity Decode_controlpath is
 				D_instout	: out STD_LOGIC_VECTOR(15 downto 0);
 				CLK			: in STD_LOGIC;
 				NOTCLK		: in STD_LOGIC;
-           in_mux_sel 	: out  STD_LOGIC);
+           in_mux_sel : out  STD_LOGIC);
 end Decode_controlpath;
 
 architecture Behavioral of Decode_controlpath is
@@ -63,7 +63,7 @@ D_instout <= DF_inst;
 process(CLK)
 begin
 	if(CLK'event and CLK='1') then
-		if((DR_inst(15 downto 12) = "0111") or (DR_inst(15 downto 12) = "1000")) then in_mux_sel <= '1'; -- Selects 4-bit Immediate
+		if((DR_inst(15 downto 12) = "0111") or (DR_inst(15 downto 12) = "1000")) then in_mux_sel <= '0'; -- Selects 4-bit Immediate
 		else in_mux_sel <= '0'; -- Otherwise selects 8-bit Immediate
 		end if;
 	end if;

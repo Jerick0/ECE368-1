@@ -31,6 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity control_toplayer is
     Port ( instruction_fetch 		: in  STD_LOGIC_Vector(15 downto 0);
+					PC						: in STD_LOGIC_VECTOR(13 downto 0);
 					CLK 					: in  STD_LOGIC;
 					Rst 					: in  STD_LOGIC;
 					e_opcode 			: out  STD_LOGIC_Vector(3 downto 0);
@@ -41,7 +42,8 @@ entity control_toplayer is
 					WB_sd_enable 		: out  STD_LOGIC_Vector(0 downto 0);
 					d_in_mux_sel 		: out  STD_LOGIC;
 					wb_datamux_sel 	: out  STD_LOGIC;
-					instruction_wb 	: out  STD_LOGIC);
+					instruction_wb 	: out  STD_LOGIC_VECTOR(3 downto 0)
+					);
 end control_toplayer;
 
 architecture Structural of control_toplayer is
@@ -68,6 +70,10 @@ signal WBPlus1							: STD_LOGIC_VECTOR(15 downto 0);
 
 begin
 notclk <= not clk;
+EXEC <= E_FtoW_R;
+WB <= W_FtoW1_R;
+instruction_WB<= WB(15 downto 12);
+
 
 Decode_state: entity work.Decode_controlpath
 			port map(		CLK				=> CLK,
@@ -86,7 +92,8 @@ Oppa_state: entity work.Opp_Acc_Control
 								CNTLB_out 		=> o_opB_muxsel,
 								EXEC 				=> Exec,
 								WB					=> WB,
-								WBPlus1			=> WBPlus1
+								WBPlus1			=> WBPlus1,
+								PC					=> PC
 								);
 								
 execute_state: entity work.execute_controlpath
@@ -97,7 +104,7 @@ execute_state: entity work.execute_controlpath
 								opcode 			=> e_opcode,
 								enable_SW 		=> e_sw_enable
 								);
-								
+
 WB_state: entity work.WB_controlpath
 			port map(		CLK				=> CLK,
 								NOTCLK			=>	NotCLK,
@@ -108,7 +115,12 @@ WB_state: entity work.WB_controlpath
 								WB_mux			=> wb_datamux_sel
 								);
 								
-
+WBPlus1_state: entity work.GP_register
+			Port Map ( 	CLK 	=> CLK,
+							D   	=> W_FtoW1_R,
+							Q	 	=> WBPLus1,
+							Rst	=> '0'
+							);	
 								
 
 

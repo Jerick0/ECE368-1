@@ -91,13 +91,13 @@ begin
 						Q			=> load);
 	
 	data_memory: entity work.data_mem
-		port map(	clka		=> write_clock,
-						wea		=> store_en,
-						addra		=> operand_b(addr_size-1 downto 0),
-						dina		=> operand_a,
-						clkb		=> read_clock,
-						addrb		=> operand_b(addr_size-1 downto 0),
-						doutb		=> data_out);
+		port map(	clka				=> write_clock,
+						wea				=> store_en,
+						addra				=> operand_b(addr_size-1 downto 0),
+						dina				=> operand_a,
+						clkb				=> read_clock,
+						addrb				=> operand_b(addr_size-1 downto 0),
+						doutb				=> data_out);
 
 end structural;
 

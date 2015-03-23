@@ -39,6 +39,6 @@ end Incrementer;
 
 architecture Behavioral of Incrementer is
 begin
-	Q <= D + 1;
+	Q <= STD_LOGIC_VECTOR( unsigned(D) + 1);
 end Behavioral;
 

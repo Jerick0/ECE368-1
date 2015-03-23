@@ -74,7 +74,8 @@ begin
 						reg_a				=> reg_a_tmp,
 						reg_b				=> reg_b_tmp,
 						w_en				=> store_enable,
-						clk				=> clk);
+						clk				=> clk,
+						rst				=> rst);
 	
 	decode_mux:	entity work.mux2to1
 		generic map(num_bits			=> immediate_L)

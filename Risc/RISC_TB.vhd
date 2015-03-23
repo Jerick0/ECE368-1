@@ -2,15 +2,15 @@
 -- Company: 
 -- Engineer:
 --
--- Create Date:   13:45:29 02/18/2015
+-- Create Date:   22:25:51 03/21/2015
 -- Design Name:   
--- Module Name:   C:/Users/Christopher/Documents/College/UMD/Digital Design/ALU/ALU_TB.vhd
--- Project Name:  ALU
+-- Module Name:   D:/ECE368/Project Path/Der_Project/RISC_TB.vhd
+-- Project Name:  Der_Project
 -- Target Device:  
 -- Tool versions:  
 -- Description:   
 -- 
--- VHDL Test Bench Created by ISE for module: ALU
+-- VHDL Test Bench Created by ISE for module: Risc_machine
 -- 
 -- Dependencies:
 -- 
@@ -32,55 +32,57 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY ALU_TB IS
-END ALU_TB;
+ENTITY RISC_TB IS
+END RISC_TB;
  
-ARCHITECTURE behavior OF ALU_TB IS 
+ARCHITECTURE behavior OF RISC_TB IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT ALU
+    COMPONENT Risc_machine
     PORT(
-         RA : IN  std_logic_vector(15 downto 0);
-         RB : IN  std_logic_vector(15 downto 0);
-         OPCODE : IN  std_logic_vector(3 downto 0);
-         CCR : OUT  std_logic_vector(3 downto 0);
-         ALU_OUT : OUT  std_logic_vector(15 downto 0)
+         CLK : IN  std_logic;
+         RST : IN  std_logic;
+         Store_Result : OUT  std_logic_vector(15 downto 0);
+         WB_Result : OUT  std_logic_vector(15 downto 0);
+         OPCODE : OUT  std_logic_vector(3 downto 0);
+         ST_offset : OUT  std_logic_vector(7 downto 0)
         );
     END COMPONENT;
     
 
    --Inputs
-   signal RA : std_logic_vector(15 downto 0) := (others => '0');
-   signal RB : std_logic_vector(15 downto 0) := (others => '0');
-   signal OPCODE : std_logic_vector(3 downto 0) := (others => '0');
+   signal CLK : std_logic := '0';
+   signal RST : std_logic := '0';
 
  	--Outputs
-   signal CCR : std_logic_vector(3 downto 0);
-   signal ALU_OUT : std_logic_vector(15 downto 0);
-   -- No clocks detected in port list. Replace <clock> below with 
-   -- appropriate port name 
- 
-   constant <clock>_period : time := 10 ns;
+   signal Store_Result : std_logic_vector(15 downto 0);
+   signal WB_Result : std_logic_vector(15 downto 0);
+   signal OPCODE : std_logic_vector(3 downto 0);
+   signal ST_offset : std_logic_vector(7 downto 0);
+
+   -- Clock period definitions
+   constant CLK_period : time := 10 ns;
  
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: ALU PORT MAP (
-          RA => RA,
-          RB => RB,
+   uut: Risc_machine PORT MAP (
+          CLK => CLK,
+          RST => RST,
+          Store_Result => Store_Result,
+          WB_Result => WB_Result,
           OPCODE => OPCODE,
-          CCR => CCR,
-          ALU_OUT => ALU_OUT
+          ST_offset => ST_offset
         );
 
    -- Clock process definitions
-   <clock>_process :process
+   CLK_process :process
    begin
-		<clock> <= '0';
-		wait for <clock>_period/2;
-		<clock> <= '1';
-		wait for <clock>_period/2;
+		CLK <= '0';
+		wait for CLK_period/2;
+		CLK <= '1';
+		wait for CLK_period/2;
    end process;
  
 
@@ -89,10 +91,13 @@ BEGIN
    begin		
       -- hold reset state for 100 ns.
       wait for 100 ns;	
+		
+			report "Starting RISC test-bank" severity note;
 
-      wait for <clock>_period*10;
+      wait for CLK_period*10;
 
       -- insert stimulus here 
+		
 
       wait;
    end process;

@@ -19,6 +19,8 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.numeric_std.all;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use work.all;
 
 
@@ -42,12 +44,13 @@ end Fetch;
 
 architecture Structural of Fetch is
 
-	signal INSTR: STD_LOGIC_VECTOR (15 downto 0); -- Wires connecting Instruction Memory to Instruction Register
-	signal PC_INDEX, INC_PC  : STD_LOGIC_VECTOR (13 downto 0);
+	signal INSTR: STD_LOGIC_VECTOR (15 downto 0) := (others => '0'); -- Wires connecting Instruction Memory to Instruction Register
+	signal PC_INDEX, INC_PC  : STD_LOGIC_VECTOR (13 downto 0) := (others => '0');
 	
 begin
-INST <= INSTR; --Instruction output
-ProgC <= PC_INDEX; -- Program Counter Output
+	INST <= INSTR; --Instruction output
+	ProgC <= PC_INDEX; -- Program Counter Output
+	
 	PC: entity work.GP_register -- Program Counter Register
 	generic map (num_bits => 14)
 	port map( CLK => CLK,
@@ -55,8 +58,8 @@ ProgC <= PC_INDEX; -- Program Counter Output
 				 D => INC_PC,
 				 Q => PC_INDEX);
 				 
-	INC: entity work.Incrementer -- Incrementer
-	port map( D => PC_INDEX,
+ 	INC: entity work.Incrementer -- Incrementer
+ 	port map( D => PC_INDEX,
 				 Q => INC_PC);
 	
 	INSTR_MEM: entity work.Instruction_Memory -- Block ROM for Instruction Memory

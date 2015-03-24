@@ -64,7 +64,7 @@ process(CLK)
 begin
 	if(CLK'event and CLK='1') then
 		if((DR_inst(15 downto 12) = "0111") or (DR_inst(15 downto 12) = "1000")) then in_mux_sel <= '0'; -- Selects 4-bit Immediate
-		else in_mux_sel <= '0'; -- Otherwise selects 8-bit Immediate
+		else in_mux_sel <= '1'; -- Otherwise selects 8-bit Immediate
 		end if;
 	end if;
 			

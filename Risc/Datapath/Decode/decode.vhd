@@ -80,8 +80,8 @@ begin
 	decode_mux:	entity work.mux2to1
 		generic map(num_bits			=> immediate_L)
 		port map(	clk				=> clk,
-						in_1				=> immediate_4,
-						in_2				=> immediate_8,
+						in_1				=> immediate_8,
+						in_2				=> immediate_4,
 						o					=> im_mux,
 						sel				=> sel);
 	

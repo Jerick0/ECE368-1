@@ -50,9 +50,8 @@ signal WB_ST_DATA_EN : STD_LOGIC_VECTOR(0 downto 0);
 signal D_MUX_SEL : STD_LOGIC;
 signal WB_DATA_MUX : STD_LOGIC;
 signal INST_FETCH_BITCH : STD_LOGIC_VECTOR(15 downto 0);
-signal PC : STD_LOGIC_VECTOR(13 downto 0);
+signal PC : STD_LOGIC_VECTOR(4 downto 0);
 signal RST_LINE : STD_LOGIC;
-
 
 begin
 

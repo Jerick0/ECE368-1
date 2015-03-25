@@ -24,7 +24,7 @@ use work.all;
 entity datapath is
 	generic(	num_bits			: integer:=16;			-- number of bits to a word
 				instruct_size	: integer:=16;			-- size of an instruction
-				pc_size			: integer:=14;
+				pc_size			: integer:=5;
 				immediate_L		: integer:=8;
 				immediate_S		: integer:=4;
 				ccr_size			: integer:=4;

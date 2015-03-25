@@ -24,8 +24,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity Incrementer is
 
-	port( D : in STD_LOGIC_VECTOR(13 downto 0);
-			Q : out STD_LOGIC_VECTOR(13 downto 0));
+	port( D : in STD_LOGIC_VECTOR(4 downto 0);
+			Q : out STD_LOGIC_VECTOR(4 downto 0));
 end Incrementer;
 
 architecture Behavioral of Incrementer is

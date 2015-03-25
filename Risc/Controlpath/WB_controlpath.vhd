@@ -36,7 +36,8 @@ entity WB_controlpath is
            En_StoreData : out  STD_LOGIC_Vector(0 downto 0);
            WB_mux : out  STD_LOGIC;
 			  CLK		:	in STD_LOGIC;
-			  NotCLK	: 	in STD_LOGIC
+			  NotCLK	: 	in STD_LOGIC;
+			  rst		: in STD_LOGIC
 			  );
 end WB_controlpath;
 
@@ -47,26 +48,26 @@ Signal WF_inst : STD_LOGIC_VECTOR(15 downto 0);
 begin
 
 W_R		: entity work.GP_register
-			Port Map ( 	CLK 	=> CLK,
+			Port Map ( 	CLK 	=> notCLK,
 							D   	=> WB_inst,
 							Q	 	=> WR_inst,
-							Rst	=> '0'
+							Rst	=> rst
 							);
 							
 W_F		: entity work.GP_register
-			Port Map (	CLK 	=> NotCLK,
+			Port Map (	CLK 	=> CLK,
 							D		=> WR_inst,
 							Q		=> WF_inst,
-							RST	=> '0'
+							RST	=> rst
 							);
 							
-WB_instout <= WF_inst;
+
 
 Process(CLK)
 Begin
-		if (CLK'event and CLK='1')then
+		if (CLK'event and CLK='0')then
 		
-			Reg_Aval <= WR_inst(11 downto 8);
+			
 			
 			if WR_inst(15 downto 12) = "1001" then WB_mux <= '1';
 			else WB_mux <='0';
@@ -76,10 +77,12 @@ end process;
 
 Process(CLK)
 Begin
-		if (CLK'event and CLK='0')then
+		if (CLK'event and CLK='1')then
 			if WF_inst(15 downto 12) = "1010" then En_StoreData <= (others => '0');
 				else EN_StoreData <=(others => '1');
-			end if;
+				end if;
+				Reg_Aval <= WR_inst(11 downto 8);
+				WB_instout <= WR_inst;
 		end if;
 end process;
 

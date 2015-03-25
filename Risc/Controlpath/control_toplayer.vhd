@@ -71,7 +71,9 @@ signal WBPlus1							: STD_LOGIC_VECTOR(15 downto 0);
 begin
 notclk <= not clk;
 EXEC <= E_FtoW_R;
-WB <= W_FtoW1_R;
+WB <= W_ftoW1_R;
+
+
 instruction_WB<= WB(15 downto 12);
 
 
@@ -80,7 +82,8 @@ Decode_state: entity work.Decode_controlpath
 								NOTCLK			=>	NotCLK,
 								D_inst 			=> instruction_fetch,
 								D_instout		=> D_FtoO_R,
-								in_mux_sel 		=> d_in_mux_sel
+								in_mux_sel 		=> d_in_mux_sel,
+								Rst				=> rst
 								);
 								
 Oppa_state: entity work.Opp_Acc_Control
@@ -93,7 +96,8 @@ Oppa_state: entity work.Opp_Acc_Control
 								EXEC 				=> Exec,
 								WB					=> WB,
 								WBPlus1			=> WBPlus1,
-								PC					=> PC
+								PC					=> PC,
+								RST				=> rst
 								);
 								
 execute_state: entity work.execute_controlpath
@@ -102,7 +106,8 @@ execute_state: entity work.execute_controlpath
 								E_inst 			=> O_FtoE_R,
 								E_instout		=> E_FtoW_R,
 								opcode 			=> e_opcode,
-								enable_SW 		=> e_sw_enable
+								enable_SW 		=> e_sw_enable,
+								rst				=> rst
 								);
 
 WB_state: entity work.WB_controlpath
@@ -112,14 +117,15 @@ WB_state: entity work.WB_controlpath
 								WB_instout		=> W_FtoW1_R,
 								Reg_Aval			=> WB_reg_addr,
 								En_StoreData 	=> WB_sd_enable,
-								WB_mux			=> wb_datamux_sel
+								WB_mux			=> wb_datamux_sel,
+								rst				=> rst
 								);
 								
 WBPlus1_state: entity work.GP_register
-			Port Map ( 	CLK 	=> CLK,
+			Port Map ( 	CLK 	=> notCLK,
 							D   	=> W_FtoW1_R,
 							Q	 	=> WBPLus1,
-							Rst	=> '0'
+							Rst	=> Rst
 							);	
 								
 

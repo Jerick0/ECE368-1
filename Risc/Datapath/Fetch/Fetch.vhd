@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: University of Massachsusetts - Dartmouth
--- Engineer: Christopher J. Souza	
+-- Engineer: Christopher J. Souza/ Chris Camara	
 -- 
 -- Create Date:    14:11:33 03/18/2015 
 -- Design Name: 

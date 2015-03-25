@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: Chris Souza/ Josh Erick
 -- 
 -- Create Date:    14:46:06 03/18/2015 
 -- Design Name: 

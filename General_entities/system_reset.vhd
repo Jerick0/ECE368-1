@@ -29,7 +29,6 @@ end system_reset;
 
 architecture behavioral of system_reset is
 	signal count	: std_logic_vector(0 to 5) := (others => '0');
-	
 begin
 	process (clk)
 	begin

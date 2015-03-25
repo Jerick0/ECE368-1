@@ -32,7 +32,6 @@ use work.all;
 
 entity Risc_machine is
     Port ( CLK : in  STD_LOGIC;
-           RST : in  STD_LOGIC;
            Store_Result : out  STD_LOGIC_VECTOR(15 downto 0);
            WB_Result : out  STD_LOGIC_VECTOR(15 downto 0);
            OPCODE : out  STD_LOGIC_VECTOR(3 downto 0);
@@ -57,7 +56,7 @@ signal RST_LINE : STD_LOGIC;
 
 begin
 
-R_U : entity work.system_rest
+R_U : entity work.system_reset
 	port map(	clk						=> clk,
 					rst						=> rst_line);
 

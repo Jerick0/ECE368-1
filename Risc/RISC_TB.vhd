@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 -- Company: 
--- Engineer:
+-- Engineer:	Chris Camara/Josh Erick
 --
 -- Create Date:   22:25:51 03/21/2015
 -- Design Name:   

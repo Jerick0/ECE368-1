@@ -35,7 +35,8 @@ entity execute_controlpath is
            opcode 		: out  STD_LOGIC_Vector(3 downto 0);
            enable_SW 	: out  STD_LOGIC_Vector(0 downto 0);
 			  CLK				:	in STD_LOGIC;
-			  NotCLK			: 	in STD_LOGIC
+			  NotCLK			: 	in STD_LOGIC;
+			  RST				: in	STD_LOGIC
 			 
 			  );
 end execute_controlpath;
@@ -46,24 +47,23 @@ signal EF_inst : STD_LOGIC_VECTOR(15 downto 0);
 
 begin
 E_R		: entity work.GP_register
-			Port Map ( 	CLK 	=> CLK,
+			Port Map ( 	CLK 	=> notCLK,
 							D   	=> E_inst,
 							Q	 	=> ER_inst,
-							Rst	=> '0'
-							);
+							Rst	=> RST							);
 							
 E_F		: entity work.GP_register
-			Port Map (	CLK 	=> NotCLK,
+			Port Map (	CLK 	=> CLK,
 							D		=> ER_inst,
 							Q		=> EF_inst,
-							RST	=> '0'
+							RST	=> RST
 							);
 E_instout <= EF_inst;
 
 
 Process(CLK)
 begin
-	if(CLK'event and CLK='1')then
+	if(CLK'event and CLK='0')then
 	
 			opcode <= ER_inst(15 downto 12);
 	end if;
@@ -71,7 +71,7 @@ end process;
 
 Process(CLK)
 begin
-	if(CLK'event and CLK='0')then
+	if(CLK'event and CLK='1')then
 		
 		if EF_inst(15 downto 12) = "1010" then enable_SW <= (others=>'1');
 						 else enable_SW <=(others=>'0');

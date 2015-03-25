@@ -15,6 +15,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity result_bank is
@@ -54,6 +55,10 @@ begin
 				reg_collection <= (others => (others => '0'));
 			elsif(w_en(0) = '1') then																-- if a write is being enabled
 				reg_collection(to_integer(unsigned(write_addr))) <= data_in;	-- write to the register being addressed
+				write_addr <= write_addr + 1;
+					if write_addr > 20 then
+						write_addr <= (others => '0');
+					end if;
 			end if;
 		end if;
 	end process;

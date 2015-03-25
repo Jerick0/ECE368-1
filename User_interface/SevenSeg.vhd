@@ -22,7 +22,7 @@ entity SSegDriver is
     port (
         CLK     : in  STD_LOGIC; -- 50 MHz input
         RST     : in  STD_LOGIC;
-        EN      : in  STD_LOGIC;
+        EN      : in  STD_LOGIC := '1';
         SEG_0   : in STD_LOGIC_VECTOR (3 downto 0);
         SEG_1   : in STD_LOGIC_VECTOR (3 downto 0);
         SEG_2   : in STD_LOGIC_VECTOR (3 downto 0);

@@ -20,7 +20,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 USE ieee.std_logic_unsigned.all;
 
 entity debounce is
-    Generic ( wait_time : INTEGER := 20);
+    Generic ( wait_time : INTEGER := 1);
     -- Wait_time is a fixed time to wait to validate a debounce signal
     -- Wait time is based on the Nexys 50 MHZ Clock
     -- XX : (2^xx + 2)/CLK

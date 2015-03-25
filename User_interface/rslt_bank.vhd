@@ -56,6 +56,9 @@ begin
 			elsif(w_en(0) = '1') then																-- if a write is being enabled
 				reg_collection(to_integer(unsigned(write_addr))) <= data_in;	-- write to the register being addressed
 				write_addr <= write_addr + 1;
+					if write_addr > 20 then
+						write_addr <= (others => '0');
+					end if;
 			end if;
 		end if;
 	end process;

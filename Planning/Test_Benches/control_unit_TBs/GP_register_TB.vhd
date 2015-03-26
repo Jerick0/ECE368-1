@@ -1,16 +1,16 @@
 --------------------------------------------------------------------------------
 -- Company: 
--- Engineer:	Chris Camara/Josh Erick
+-- Engineer:		Josh Erick
 --
--- Create Date:   22:25:51 03/21/2015
+-- Create Date:   19:52:11 03/23/2015
 -- Design Name:   
--- Module Name:   D:/ECE368/Project Path/Der_Project/RISC_TB.vhd
--- Project Name:  Der_Project
+-- Module Name:   D:/ECE368/Project Path/GP_reg_TB/GPREG_TB.vhd
+-- Project Name:  GP_reg_TB
 -- Target Device:  
 -- Tool versions:  
 -- Description:   
 -- 
--- VHDL Test Bench Created by ISE for module: Risc_machine
+-- VHDL Test Bench Created by ISE for module: GP_register
 -- 
 -- Dependencies:
 -- 
@@ -32,21 +32,19 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY RISC_TB IS
-END RISC_TB;
+ENTITY GPREG_TB IS
+END GPREG_TB;
  
-ARCHITECTURE behavior OF RISC_TB IS 
+ARCHITECTURE behavior OF GPREG_TB IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT Risc_machine
+    COMPONENT GP_register
     PORT(
          CLK : IN  std_logic;
          RST : IN  std_logic;
-         Store_Result : OUT  std_logic_vector(15 downto 0);
-         WB_Result : OUT  std_logic_vector(15 downto 0);
-         OPCODE : OUT  std_logic_vector(3 downto 0);
-         ST_offset : OUT  std_logic_vector(7 downto 0)
+         D : IN  std_logic_vector(15 downto 0);
+         Q : OUT  std_logic_vector(15 downto 0)
         );
     END COMPONENT;
     
@@ -54,12 +52,10 @@ ARCHITECTURE behavior OF RISC_TB IS
    --Inputs
    signal CLK : std_logic := '0';
    signal RST : std_logic := '0';
+   signal D : std_logic_vector(15 downto 0) := (others => '0');
 
  	--Outputs
-   signal Store_Result : std_logic_vector(15 downto 0);
-   signal WB_Result : std_logic_vector(15 downto 0);
-   signal OPCODE : std_logic_vector(3 downto 0);
-   signal ST_offset : std_logic_vector(7 downto 0);
+   signal Q : std_logic_vector(15 downto 0);
 
    -- Clock period definitions
    constant CLK_period : time := 10 ns;
@@ -67,13 +63,11 @@ ARCHITECTURE behavior OF RISC_TB IS
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: Risc_machine PORT MAP (
+   uut: GP_register PORT MAP (
           CLK => CLK,
           RST => RST,
-          Store_Result => Store_Result,
-          WB_Result => WB_Result,
-          OPCODE => OPCODE,
-          ST_offset => ST_offset
+          D => D,
+          Q => Q
         );
 
    -- Clock process definitions
@@ -91,14 +85,14 @@ BEGIN
    begin		
       -- hold reset state for 100 ns.
       wait for 100 ns;	
-		
-			report "Starting RISC test-bank" severity note;
 
       wait for CLK_period*10;
 
       -- insert stimulus here 
-		
-
+		D <= "1010101010101010";
+		wait for CLK_period/2;
+		d <= "1111010111110000";
+		wait for CLK_period;
       wait;
    end process;
 

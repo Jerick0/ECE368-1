@@ -1,16 +1,16 @@
 --------------------------------------------------------------------------------
 -- Company: 
--- Engineer:
+-- Engineer:	Josh Erick
 --
--- Create Date:   20:12:10 03/23/2015
+-- Create Date:   01:05:07 03/24/2015
 -- Design Name:   
--- Module Name:   D:/ECE368/Project Path/Decode_TB/Decode_TB.vhd
--- Project Name:  Decode_TB
+-- Module Name:   D:/Xilinx/WB_TB/WB_TB.vhd
+-- Project Name:  WB_TB
 -- Target Device:  
 -- Tool versions:  
 -- Description:   
 -- 
--- VHDL Test Bench Created by ISE for module: Decode_controlpath
+-- VHDL Test Bench Created by ISE for module: WB_controlpath
 -- 
 -- Dependencies:
 -- 
@@ -32,47 +32,53 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY Decode_TB IS
-END Decode_TB;
+ENTITY WB_TB IS
+END WB_TB;
  
-ARCHITECTURE behavior OF Decode_TB IS 
+ARCHITECTURE behavior OF WB_TB IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT Decode_controlpath
+    COMPONENT WB_controlpath
     PORT(
-         D_inst : IN  std_logic_vector(15 downto 0);
-         D_instout : OUT  std_logic_vector(15 downto 0);
+         WB_inst : IN  std_logic_vector(15 downto 0);
+         WB_instout : OUT  std_logic_vector(15 downto 0);
+         Reg_Aval : OUT  std_logic_vector(3 downto 0);
+         En_StoreData : OUT  std_logic_vector(0 downto 0);
+         WB_mux : OUT  std_logic;
          CLK : IN  std_logic;
-         NOTCLK : IN  std_logic;
-         in_mux_sel : OUT  std_logic
+         NotCLK : IN  std_logic
         );
     END COMPONENT;
     
 
    --Inputs
-   signal D_inst : std_logic_vector(15 downto 0) := (others => '0');
+   signal WB_inst : std_logic_vector(15 downto 0) := (others => '0');
    signal CLK : std_logic := '0';
-   signal NOTCLK : std_logic := '0';
+   signal NotCLK : std_logic := '0';
 
  	--Outputs
-   signal D_instout : std_logic_vector(15 downto 0);
-   signal in_mux_sel : std_logic;
+   signal WB_instout : std_logic_vector(15 downto 0);
+   signal Reg_Aval : std_logic_vector(3 downto 0);
+   signal En_StoreData : std_logic_vector(0 downto 0);
+   signal WB_mux : std_logic;
 
    -- Clock period definitions
    constant CLK_period : time := 10 ns;
-   constant NOTCLK_period : time := 10 ns;
+   constant NotCLK_period : time := 10 ns;
  
 BEGIN
-notCLK <= not CLK;
+notclk <= not clk;
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: Decode_controlpath PORT MAP (
-          D_inst => D_inst,
-          D_instout => D_instout,
+   uut: WB_controlpath PORT MAP (
+          WB_inst => WB_inst,
+          WB_instout => WB_instout,
+          Reg_Aval => Reg_Aval,
+          En_StoreData => En_StoreData,
+          WB_mux => WB_mux,
           CLK => CLK,
-          NOTCLK => NOTCLK,
-          in_mux_sel => in_mux_sel
+          NotCLK => NotCLK
         );
 
    -- Clock process definitions
@@ -84,12 +90,12 @@ notCLK <= not CLK;
 		wait for CLK_period/2;
    end process;
  
-   NOTCLK_process :process
+   NotCLK_process :process
    begin
-		NOTCLK <= '1';
-		wait for NOTCLK_period/2;
-		NOTCLK <= '0';
-		wait for NOTCLK_period/2;
+		NotCLK <= '1';
+		wait for NotCLK_period/2;
+		NotCLK <= '0';
+		wait for NotCLK_period/2;
    end process;
  
 
@@ -102,12 +108,26 @@ notCLK <= not CLK;
       wait for CLK_period*10;
 
       -- insert stimulus here 
+		WB_inst <= "0001000100010000";
+		wait for CLK_period;
+		WB_inst <= "0001000100010000";
+		wait for CLK_period;
+		WB_inst <= "0001000100010000";
+		wait for CLK_period;
+		WB_inst <= "1001000100010000";
+		wait for CLK_period;
+		WB_inst <= "0001000100010000";
+		wait for CLK_period;
+		WB_inst <= "1010000100010000";
+		wait for CLK_period;
+		WB_inst <= "0001000100010000";
+		wait for CLK_period;
+		WB_inst <= "0001000100010000";
+		wait for CLK_period;
 		
-		D_inst <= "0000000100010000";
-		wait for CLK_period;
-		D_inst <= "0001000100010000";
-		wait for CLK_period;
-		D_inst <= "0111000100010000";
+		
+		
+		
 
       wait;
    end process;

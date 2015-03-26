@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
 -- Company: 
--- Engineer:	Chris Camara/Josh Erick
+-- Engineer:
 --
--- Create Date:   22:25:51 03/21/2015
+-- Create Date:   22:36:28 03/24/2015
 -- Design Name:   
--- Module Name:   D:/ECE368/Project Path/Der_Project/RISC_TB.vhd
--- Project Name:  Der_Project
+-- Module Name:   C:/Users/Christopher/Documents/GitHub/ECE368/Planning/Test_Benches/risc_tb.vhd
+-- Project Name:  RISC
 -- Target Device:  
 -- Tool versions:  
 -- Description:   
@@ -32,17 +32,16 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY RISC_TB IS
-END RISC_TB;
+ENTITY risc_tb IS
+END risc_tb;
  
-ARCHITECTURE behavior OF RISC_TB IS 
+ARCHITECTURE behavior OF risc_tb IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
     COMPONENT Risc_machine
     PORT(
          CLK : IN  std_logic;
-         RST : IN  std_logic;
          Store_Result : OUT  std_logic_vector(15 downto 0);
          WB_Result : OUT  std_logic_vector(15 downto 0);
          OPCODE : OUT  std_logic_vector(3 downto 0);
@@ -53,7 +52,6 @@ ARCHITECTURE behavior OF RISC_TB IS
 
    --Inputs
    signal CLK : std_logic := '0';
-   signal RST : std_logic := '0';
 
  	--Outputs
    signal Store_Result : std_logic_vector(15 downto 0);
@@ -69,7 +67,6 @@ BEGIN
 	-- Instantiate the Unit Under Test (UUT)
    uut: Risc_machine PORT MAP (
           CLK => CLK,
-          RST => RST,
           Store_Result => Store_Result,
           WB_Result => WB_Result,
           OPCODE => OPCODE,
@@ -91,13 +88,10 @@ BEGIN
    begin		
       -- hold reset state for 100 ns.
       wait for 100 ns;	
-		
-			report "Starting RISC test-bank" severity note;
 
       wait for CLK_period*10;
 
       -- insert stimulus here 
-		
 
       wait;
    end process;

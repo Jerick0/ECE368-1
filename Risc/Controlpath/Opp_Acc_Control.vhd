@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: Chris Souza/ Josh Erick
 -- 
 -- Create Date:    14:46:06 03/18/2015 
 -- Design Name: 
@@ -53,8 +53,8 @@ entity Opp_Acc_Control is
 			  CLK									: in	STD_LOGIC;
 			  notCLK								: in 	STD_LOGIC;
 			  O_instout							: out STD_LOGIC_VECTOR (15 downto 0);
-			  CNTLA_out, CNTLB_out 		 	: out STD_LOGIC_VECTOR (2 downto 0)); -- Control Lines for Operand Access Multiplexers
-
+			  CNTLA_out, CNTLB_out 		 	: out STD_LOGIC_VECTOR (2 downto 0); -- Control Lines for Operand Access Multiplexers
+				RST								: in STD_LOGIC);
 end Opp_Acc_Control;
 
 architecture Behavioral of Opp_Acc_Control is
@@ -64,23 +64,23 @@ signal OF_inst : STD_LOGIC_VECTOr(15 downto 0);
 begin
 
 O_R		: entity work.GP_register
-			Port Map ( 	CLK 	=> CLK,
+			Port Map ( 	CLK 	=> notCLK,
 							D   	=> O_inst,
 							Q	 	=> OR_inst,
-							Rst	=> '0'
+							Rst	=> RST
 							);
 							
 O_F		: entity work.GP_register
-			Port Map (	CLK 	=> NotCLK,
+			Port Map (	CLK 	=> CLK,
 							D		=> OR_inst,
 							Q		=> OF_INST,
-							RST	=> '0'
+							RST	=> RST
 							);
 O_instout <= OF_inst;
  
 process (CLK)
 	begin
-	if (CLK'event and CLK ='0')then
+	if (CLK'event and CLK ='1')then
 				if(PC = "00000000000010") then -- First Time an Instruction Enters Operand Access	
 			CNTLA_out <= "000";
 			CNTLB_out <= "001";

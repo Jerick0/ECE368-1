@@ -2,15 +2,15 @@
 -- Company: 
 -- Engineer:
 --
--- Create Date:   18:36:14 03/24/2015
+-- Create Date:   10:30:35 03/25/2015
 -- Design Name:   
--- Module Name:   C:/Users/Christopher/Documents/College/UMD/Digital Design/Lab03/Testing/Fetch_Test/fetch_reset_tb.vhd
--- Project Name:  Fetch_Test
+-- Module Name:   D:/ECE368/Project Path/DP_WB_TB/DP_WB_TB.vhd
+-- Project Name:  DP_WB_TB
 -- Target Device:  
 -- Tool versions:  
 -- Description:   
 -- 
--- VHDL Test Bench Created by ISE for module: fetch_reset_test
+-- VHDL Test Bench Created by ISE for module: write_back
 -- 
 -- Dependencies:
 -- 
@@ -30,36 +30,34 @@ USE ieee.std_logic_1164.ALL;
  
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---USE ieee.numeric_std.ALL;
+USE ieee.numeric_std.ALL;
  
-ENTITY fetch_reset_tb IS
-END fetch_reset_tb;
+ENTITY DP_WB_TB IS
+END DP_WB_TB;
  
-ARCHITECTURE behavior OF fetch_reset_tb IS 
+ARCHITECTURE behavior OF DP_WB_TB IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT fetch_reset_test
+    COMPONENT write_back
     PORT(
+         alu_result : IN  std_logic_vector(15 downto 0);
+         load_result : IN  std_logic_vector(15 downto 0);
+         writeback_out : OUT  std_logic_vector(15 downto 0);
          clk : IN  std_logic;
-         IMM : OUT  std_logic_vector(3 downto 0);
-         RB : OUT  std_logic_vector(3 downto 0);
-         RA : OUT  std_logic_vector(3 downto 0);
-         ProgC : OUT  std_logic_vector(13 downto 0);
-         INST : OUT  std_logic_vector(15 downto 0)
+         sel : IN  std_logic
         );
     END COMPONENT;
     
 
    --Inputs
+   signal alu_result : std_logic_vector(15 downto 0) := (others => '0');
+   signal load_result : std_logic_vector(15 downto 0) := (others => '0');
    signal clk : std_logic := '0';
+   signal sel : std_logic := '0';
 
  	--Outputs
-   signal IMM : std_logic_vector(3 downto 0);
-   signal RB : std_logic_vector(3 downto 0);
-   signal RA : std_logic_vector(3 downto 0);
-   signal ProgC : std_logic_vector(13 downto 0);
-   signal INST : std_logic_vector(15 downto 0);
+   signal writeback_out : std_logic_vector(15 downto 0);
 
    -- Clock period definitions
    constant clk_period : time := 10 ns;
@@ -67,13 +65,12 @@ ARCHITECTURE behavior OF fetch_reset_tb IS
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: fetch_reset_test PORT MAP (
+   uut: write_back PORT MAP (
+          alu_result => alu_result,
+          load_result => load_result,
+          writeback_out => writeback_out,
           clk => clk,
-          IMM => IMM,
-          RB => RB,
-          RA => RA,
-          ProgC => ProgC,
-          INST => INST
+          sel => sel
         );
 
    -- Clock process definitions
@@ -95,8 +92,16 @@ BEGIN
       wait for clk_period*10;
 
       -- insert stimulus here 
+		ALU_result <= "1111000000000000";
+	Load_result <= "1010101010101010";
+	sel <= '0';
+	wait for CLK_period*2;
+	sel <= '1';
+	wait for CLK_period*2;
+	sel <= '0';
 
       wait;
    end process;
-
+	
+	
 END;

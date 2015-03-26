@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: Chris Camara
 -- 
 -- Create Date:    14:28:25 03/19/2015 
 -- Design Name: 
@@ -63,7 +63,7 @@ architecture structural of decode is
 begin
 	-- connect immediate values to grab different possibilities
 	immediate_8 <= immediate;
-	immediate_4 <= "0000" & immediate(immediate_L-1 downto immediate_S);
+	immediate_4 <= "0000" & immediate(immediate_S-1 downto 0);			-- switched order of small immediate values
 	immediate_out(num_bits-1 downto immediate_L)	<= "00000000";
 	
 	register_bank: entity work.reg_bank

@@ -38,27 +38,28 @@ entity Fetch is
 			 IMM: OUT STD_LOGIC_VECTOR (3 downto 0); --Immediate operand
 			 RB: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register B Address
 			 RA: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register A Address
-			 ProgC : OUT STD_LOGIC_VECTOR (13 downto 0);
+			 ProgC : OUT STD_LOGIC_VECTOR (4 downto 0);
 			 INST : OUT STD_LOGIC_VECTOR (15 downto 0)); -- Instruction
 end Fetch;
 
 architecture Structural of Fetch is
 
 	signal INSTR: STD_LOGIC_VECTOR (15 downto 0) := (others => '0'); -- Wires connecting Instruction Memory to Instruction Register
-	signal PC_INDEX, INC_PC  : STD_LOGIC_VECTOR (13 downto 0) := (others => '0');
+	signal PC_INDEX, INC_PC  : STD_LOGIC_VECTOR (4 downto 0) := (others => '0');
 	
 begin
 	INST <= INSTR; --Instruction output
 	ProgC <= PC_INDEX; -- Program Counter Output
 	
 	PC: entity work.GP_register -- Program Counter Register
-	generic map (num_bits => 14)
+	generic map (num_bits => 5)
 	port map( CLK => CLK,
 				 RST => RST,
 				 D => INC_PC,
 				 Q => PC_INDEX);
 				 
  	INC: entity work.Incrementer -- Incrementer
+	
  	port map( D => PC_INDEX,
 				 Q => INC_PC);
 	

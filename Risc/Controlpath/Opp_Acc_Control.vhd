@@ -49,7 +49,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity Opp_Acc_Control is
 
     Port ( O_inst, EXEC, WB, WBPLUS1 	: in  STD_LOGIC_VECTOR (15 downto 0); -- Relevant Instructions from Instruction Register Bank
-           PC								 	: in  STD_LOGIC_VECTOR (13 downto 0);
+           PC								 	: in  STD_LOGIC_VECTOR (4 downto 0);
 			  CLK									: in	STD_LOGIC;
 			  notCLK								: in 	STD_LOGIC;
 			  O_instout							: out STD_LOGIC_VECTOR (15 downto 0);

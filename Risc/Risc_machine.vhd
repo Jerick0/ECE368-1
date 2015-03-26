@@ -41,20 +41,27 @@ end Risc_machine;
 
 architecture Behavioral of Risc_machine is
 
-signal EXEC_OP : STD_LOGIC_VECTOR(3 downto 0);
-signal EXEC_SW_EN : STD_LOGIC_VECTOR(0 downto 0);
-signal CNTLA	: STD_LOGIC_VECTOR(2 downto 0);
-signal CNTLB	: STD_LOGIC_VECTOR(2 downto 0);
-signal WB_REG_ADD : STD_LOGIC_VECTOR(3 downto 0);
-signal WB_ST_DATA_EN : STD_LOGIC_VECTOR(0 downto 0);
-signal D_MUX_SEL : STD_LOGIC;
-signal WB_DATA_MUX : STD_LOGIC;
-signal INST_FETCH_BITCH : STD_LOGIC_VECTOR(15 downto 0);
-signal PC : STD_LOGIC_VECTOR(13 downto 0);
-signal RST_LINE : STD_LOGIC;
+signal EXEC_OP : STD_LOGIC_VECTOR(3 downto 0):=(others => '0');
+signal EXEC_SW_EN : STD_LOGIC_VECTOR(0 downto 0):=(others => '0');
+signal CNTLA	: STD_LOGIC_VECTOR(2 downto 0):=(others => '0');
+signal CNTLB	: STD_LOGIC_VECTOR(2 downto 0):=(others => '0');
+signal WB_REG_ADD : STD_LOGIC_VECTOR(3 downto 0):=(others => '0');
+signal WB_ST_DATA_EN : STD_LOGIC_VECTOR(0 downto 0):=(others => '0');
+signal D_MUX_SEL : STD_LOGIC:='0';
+signal WB_DATA_MUX : STD_LOGIC:='0';
+signal INST_FETCH_BITCH : STD_LOGIC_VECTOR(15 downto 0):=(others => '0');
+signal PC : STD_LOGIC_VECTOR(4 downto 0):=(others => '0');
+signal RST_LINE : STD_LOGIC:='0';
 
+signal tmp_store_result	: std_logic_vector(15 downto 0) :=(others => '0');
+signal tmp_wb_result		: std_logic_vector(15 downto 0) :=(others => '0');
+signal tmp_st_offset		: std_logic_vector(7 downto 0)  :=(others => '0');
 
 begin
+
+store_result	<= tmp_store_result;
+wb_result		<= tmp_wb_result;
+st_offset		<= tmp_st_offset;
 
 R_U : entity work.system_reset
 	port map(	clk						=> clk,
@@ -89,10 +96,10 @@ DP_U : entity work.datapath
 						WB_REG_ADDR			=> WB_REG_ADD,
 						PC						=> PC,
 						instruction_FETCH	=> INST_FETCH_BITCH,
-						WB_RESULT			=> WB_Result,
+						WB_RESULT			=> tmp_wb_result,
 						--put ccr in when needed
-						STORE_RESULT		=> Store_Result,
-						STORE_OFFSET		=> ST_offset
+						STORE_RESULT		=> tmp_store_result,
+						STORE_OFFSET		=> tmp_ST_offset
 						);
 
 

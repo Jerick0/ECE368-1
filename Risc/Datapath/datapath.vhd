@@ -24,7 +24,7 @@ use work.all;
 entity datapath is
 	generic(	num_bits			: integer:=16;			-- number of bits to a word
 				instruct_size	: integer:=16;			-- size of an instruction
-				pc_size			: integer:=14;
+				pc_size			: integer:=5;
 				immediate_L		: integer:=8;
 				immediate_S		: integer:=4;
 				ccr_size			: integer:=4;
@@ -144,7 +144,8 @@ begin
 						cntl_b			=> o_opB_mux_sel,
 						clk				=> clk,
 						op_a				=> operand_a,
-						op_b				=> operand_b);
+						op_b				=> operand_b,
+						rst				=> rst);
 	
 	---------------------------------------------------------------
 	-- execute unit
@@ -168,7 +169,8 @@ begin
 						load_result		=> load_out,
 						writeback_out	=> wb_data,
 						clk				=> clk,
-						sel				=> wb_data_mux_sel);
+						sel				=> wb_data_mux_sel,
+						rst				=> rst);
 	
 end structural;
 

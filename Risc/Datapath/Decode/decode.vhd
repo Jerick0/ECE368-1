@@ -83,7 +83,8 @@ begin
 						in_1				=> immediate_8,
 						in_2				=> immediate_4,
 						o					=> im_mux,
-						sel				=> sel);
+						sel				=> sel,
+						rst				=> rst);
 	
 	register_mux: entity work.GP_register
 		generic map(num_bits			=> immediate_L)

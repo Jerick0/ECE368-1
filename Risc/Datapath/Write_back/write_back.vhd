@@ -33,6 +33,7 @@ entity write_back is
 			
 			-- control
 			clk				: in std_logic;			-- system clock
+			rst				: in std_logic;
 			sel				: in std_logic);			-- select line
 end write_back;
 
@@ -51,7 +52,8 @@ begin
 						in_1	=> input_alu,
 						in_2	=> input_load,
 						o		=> o,
-						sel	=> sel);
+						sel	=> sel,
+						rst	=> rst);
 
 end structural;
 

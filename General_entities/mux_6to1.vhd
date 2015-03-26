@@ -38,7 +38,8 @@ entity mux_6to1 is
            F 		: in  STD_LOGIC_Vector(15 downto 0);          
 			  SEL 	: in  STD_LOGIC_Vector(2 downto 0);
 			  CLK 	: in 	STD_LOGIC;
-           O 	: out  STD_LOGIC_Vector(15 downto 0)
+           O 	: out  STD_LOGIC_Vector(15 downto 0);
+			  rst		: in std_logic
 			  );
 end mux_6to1;
 
@@ -49,17 +50,19 @@ begin
 	begin
  
 			if (CLK'event and CLK='1') then
-		
-				case SEL is
-					when "000" =>O<=A;		
-					when "001" =>O<=B;		
-					when "010" =>O<=C;
-					when "011" =>O<=D;
-					when "100" =>O<=E;
-					when "101" =>O<=F;
-					when others =>O<=B;								
-					END CASE;
-				
+				if (rst = '1') then
+					O <= (others => '0');
+				else
+					case SEL is
+						when "000" =>O<=A;		
+						when "001" =>O<=B;		
+						when "010" =>O<=C;
+						when "011" =>O<=D;
+						when "100" =>O<=E;
+						when "101" =>O<=F;
+						when others =>O<=B;								
+						END CASE;
+				end if;
 			end if;
 	end process;
  end COMBINATIONAL;

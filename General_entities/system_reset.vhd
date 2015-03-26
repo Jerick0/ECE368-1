@@ -33,7 +33,7 @@ begin
 	process (clk)
 	begin
 		if(clk'event and clk = '1') then
-			if(count < "10101") then
+			if(count < "11111") then
 				count <= count + 1;
 				rst <= '1';
 			else

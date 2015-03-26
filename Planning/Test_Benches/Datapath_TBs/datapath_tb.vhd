@@ -146,6 +146,7 @@ BEGIN
 		wait for clk_period/2;
 		wb_data_mux_sel<= '0'; -- 5002
 		e_opcode			<= x"5"; -- 5101
+		d_im_mux_sel	<= '1'; -- 950F
 		
 		wait for clk_period/2;
 		wb_reg_addr		<= x"0"; -- 5002
@@ -157,10 +158,19 @@ BEGIN
 		-- 5 clock cycle----------------------------------
 		wait for clk_period/2;
 		wb_data_mux_sel<= '0'; -- 5101
+		e_opcode			<= x"A"; -- A10F
 		
 		wait for clk_period/2;
 		wb_reg_addr		<= x"1"; -- 5101
 		wb_sd_enable(0)<= '1'; -- 5101
+		e_sw_enable(0)	<= '1' -- A10F
+		
+		-- 6 clock cycle----------------------------------
+		wait for clk_period/2;
+		
+		wait for clk_period/2;
+		
+		
       wait;
    end process;
 

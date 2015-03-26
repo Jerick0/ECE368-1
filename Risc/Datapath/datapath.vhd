@@ -144,7 +144,8 @@ begin
 						cntl_b			=> o_opB_mux_sel,
 						clk				=> clk,
 						op_a				=> operand_a,
-						op_b				=> operand_b);
+						op_b				=> operand_b,
+						rst				=> rst);
 	
 	---------------------------------------------------------------
 	-- execute unit
@@ -168,7 +169,8 @@ begin
 						load_result		=> load_out,
 						writeback_out	=> wb_data,
 						clk				=> clk,
-						sel				=> wb_data_mux_sel);
+						sel				=> wb_data_mux_sel,
+						rst				=> rst);
 	
 end structural;
 

@@ -37,7 +37,8 @@ entity mux_5to1 is
            E 		: in  STD_LOGIC_Vector(15 downto 0);
            SEL 	: in  STD_LOGIC_Vector(2 downto 0);
 			  EN 		: in 	STD_LOGIC;
-           OUTP 	: out  STD_LOGIC_Vector(15 downto 0)
+           OUTP 	: out  STD_LOGIC_Vector(15 downto 0);
+			  rst		: in std_logic
 			  );
 end mux_5to1;
 
@@ -48,16 +49,18 @@ begin
 	begin
  
 			if (EN'event and en='1') then
-		
-				case SEL is
-					when "000" =>OUTP<=A;		
-					when "001" =>OUTP<=B;		
-					when "010" =>OUTP<=C;
-					when "011" =>OUTP<=D;
-					when "100" =>OUTP<=E;					
-					when others =>OUTP<=A;								
-					END CASE;
-				
+				if (rst = '1') then
+					OUTP <= (others => '0');
+				else
+					case SEL is
+						when "000" =>OUTP<=A;		
+						when "001" =>OUTP<=B;		
+						when "010" =>OUTP<=C;
+						when "011" =>OUTP<=D;
+						when "100" =>OUTP<=E;					
+						when others =>OUTP<=A;								
+						END CASE;
+				end if;
 			end if;
 	end process;
  end COMBINATIONAL;

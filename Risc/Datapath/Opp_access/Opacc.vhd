@@ -41,7 +41,8 @@ entity Opacc is
            Cntl_B 			: in  STD_LOGIC_Vector(2 downto 0);
 			  CLK					: in  STD_LOGIC;
            OP_A 				: out  STD_LOGIC_Vector(15 downto 0);
-           OP_B 				: out  STD_LOGIC_Vector(15 downto 0)
+           OP_B 				: out  STD_LOGIC_Vector(15 downto 0);
+			  rst					: in std_logic
 			  );
 end Opacc;
 
@@ -60,7 +61,8 @@ notclock<=not clk;
 							 F => WBplus1_F,							 
 							 SEL => Cntl_B,
 							 CLK => notclock,
-							 O => OP_B
+							 O => OP_B,
+							 rst=> rst
 							 );
 		 
 		 MUX_A: entity work.mux_5to1
@@ -71,7 +73,8 @@ notclock<=not clk;
 							 E => WBplus1_F,
 							 SEL => Cntl_A,
 							 EN =>notclock,
-							 OUTP => OP_A);
+							 OUTP => OP_A,
+							 rst => rst);
 							 
 							 
 							 

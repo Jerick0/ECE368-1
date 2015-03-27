@@ -65,13 +65,14 @@ st_offset		<= tmp_st_offset;
 
 R_U : entity work.system_reset
 	port map(	clk						=> clk,
+					pc							=> pc,
 					rst						=> rst_line);
 
 C_U : entity work.control_toplayer
 	Port map( instruction_fetch   	=> INST_FETCH_BITCH,
 					PC							=>	PC,
 					CLK						=> CLK,
-					RST						=> RST_LINE,
+					RST						=> '0',--RST_LINE,
 					E_OPCODE					=> EXEC_OP,
 					E_SW_ENABLE				=> EXEC_SW_EN,
 					O_OPA_MUXSEL			=> CNTLA,

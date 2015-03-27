@@ -61,7 +61,7 @@ W_F		: entity work.GP_register
 							RST	=> rst
 							);
 							
-
+			WB_instout <= WB_inst;
 
 Process(CLK)
 Begin
@@ -72,6 +72,7 @@ Begin
 			if WR_inst(15 downto 12) = "1001" then WB_mux <= '1';
 			else WB_mux <='0';
 			end if;
+
 		end if;
 end process;
 
@@ -82,7 +83,6 @@ Begin
 				else EN_StoreData <=(others => '1');
 				end if;
 				Reg_Aval <= WR_inst(11 downto 8);
-				WB_instout <= WR_inst;
 		end if;
 end process;
 

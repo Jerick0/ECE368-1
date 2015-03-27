@@ -6,3 +6,5 @@
      - Looks like instruction registers are triggered on wrong (opposite) edge
      - This is odd since the code is the same as the decode module
      - Displayed in OpAcc_Test1.PNG
+
+- Switched all clocks in control path registers only

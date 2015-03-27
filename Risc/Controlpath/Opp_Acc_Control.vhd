@@ -64,14 +64,14 @@ signal OF_inst : STD_LOGIC_VECTOr(15 downto 0);
 begin
 
 O_R		: entity work.GP_register
-			Port Map ( 	CLK 	=> notCLK,
+			Port Map ( 	CLK 	=> CLK,
 							D   	=> O_inst,
 							Q	 	=> OR_inst,
 							Rst	=> RST
 							);
 							
 O_F		: entity work.GP_register
-			Port Map (	CLK 	=> CLK,
+			Port Map (	CLK 	=> NotCLK,
 							D		=> OR_inst,
 							Q		=> OF_INST,
 							RST	=> RST

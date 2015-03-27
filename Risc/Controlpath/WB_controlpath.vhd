@@ -48,14 +48,16 @@ Signal WF_inst : STD_LOGIC_VECTOR(15 downto 0);
 begin
 
 W_R		: entity work.GP_register
-			Port Map ( 	CLK 	=> notCLK,
+			Port Map ( 	--CLK 	=> notCLK,			-- switched clocks
+							CLk	=> notClk,				
 							D   	=> WB_inst,
 							Q	 	=> WR_inst,
 							Rst	=> rst
 							);
 							
 W_F		: entity work.GP_register
-			Port Map (	CLK 	=> CLK,
+			Port Map (	--CLK 	=> CLK,
+							Clk	=> clk,
 							D		=> WR_inst,
 							Q		=> WF_inst,
 							RST	=> rst
@@ -63,28 +65,37 @@ W_F		: entity work.GP_register
 							
 			WB_instout <= WB_inst;
 
-Process(CLK)
-Begin
-		if (CLK'event and CLK='0')then
+-- Asynchronous Logic
+with WR_inst(15 downto 12)
+	select WB_Mux <=
+		'1' when "1001",
+		'0' when others;
 		
-			
-			
-			if WR_inst(15 downto 12) = "1001" then WB_mux <= '1';
-			else WB_mux <='0';
-			end if;
+with WF_inst(15 downto 12)
+	select En_StoreData <=
+		(others => '0') when "1010",
+		(others => '1') when others;
 
-		end if;
-end process;
+Reg_Aval <= Wr_inst(11 downto 8);
 
-Process(CLK)
-Begin
-		if (CLK'event and CLK='1')then
-			if WF_inst(15 downto 12) = "1010" then En_StoreData <= (others => '0');
-				else EN_StoreData <=(others => '1');
-				end if;
-				Reg_Aval <= WR_inst(11 downto 8);
-		end if;
-end process;
+--Process(CLK)
+--Begin
+--		if (CLK'event and CLK='0')then
+--			if WR_inst(15 downto 12) = "1001" then WB_mux <= '1';
+--			else WB_mux <='0';
+--			end if;
+--		end if;
+--end process;
+--
+--Process(CLK)
+--Begin
+--		if (CLK'event and CLK='1')then
+--			if WF_inst(15 downto 12) = "1010" then En_StoreData <= (others => '0');
+--				else EN_StoreData <=(others => '1');
+--				end if;
+--				Reg_Aval <= WR_inst(11 downto 8);
+--		end if;
+--end process;
 
 
 

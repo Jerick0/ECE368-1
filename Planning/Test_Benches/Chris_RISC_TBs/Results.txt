@@ -1,7 +1,8 @@
 - Decode
      - Verified to work correctly
+     - Found that these registers are also incorrectly edge triggered
 - Operand Access
      - Working on currently
-     - Looks like instruction registers are triggered on wrong (opposite) edge.
-     - This is odd since the code is the same as the decode module.
+     - Looks like instruction registers are triggered on wrong (opposite) edge
+     - This is odd since the code is the same as the decode module
      - Displayed in OpAcc_Test1.PNG

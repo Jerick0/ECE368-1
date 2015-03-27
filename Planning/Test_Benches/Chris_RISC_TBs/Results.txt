@@ -1,0 +1,5 @@
+- Decode
+     - Verified to work correctly
+- Operand Access
+     - Working on currently
+     - Looks like instruction registers are triggered on wrong (opposite) edge.  Displayed in OpAcc_Test1.PNG

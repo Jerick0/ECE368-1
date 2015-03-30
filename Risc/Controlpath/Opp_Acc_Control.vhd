@@ -78,9 +78,10 @@ O_F		: entity work.GP_register
 							);
 O_instout <= OF_inst;
  
-process (CLK)
+--process (CLK)
+process(O_inst, EXEC, WB, WBPLUS1)
 	begin
-	if (CLK'event and CLK ='1')then
+	--if (CLK'event and CLK ='1')then
 		if(PC = "00010") then -- First Time an Instruction Enters Operand Access	
 			CNTLA_out <= "000";
 			if ((OF_inst(15 downto 12) = "0101") or (OF_inst(15 downto 12) = "0110") or (OF_inst(15 downto 12) = "0111") or (OF_inst(15 downto 12) = "1000") or 
@@ -156,7 +157,7 @@ process (CLK)
 			else CNTLB_out <= "001"; -- Selects Register B
 			end if;
 		end if;
-	end if;
+	--end if;
 end process;
 end Behavioral;
 

@@ -49,7 +49,7 @@ begin
 
 W_R		: entity work.GP_register
 			Port Map ( 	--CLK 	=> notCLK,			-- switched clocks
-							CLk	=> notClk,				
+							CLk	=> clk,				
 							D   	=> WB_inst,
 							Q	 	=> WR_inst,
 							Rst	=> rst
@@ -57,13 +57,13 @@ W_R		: entity work.GP_register
 							
 W_F		: entity work.GP_register
 			Port Map (	--CLK 	=> CLK,
-							Clk	=> clk,
+							Clk	=> notclk,
 							D		=> WR_inst,
 							Q		=> WF_inst,
 							RST	=> rst
 							);
 							
-			WB_instout <= WB_inst;
+			WB_instout <= WF_inst;			-- switched was WB_inst
 
 -- Asynchronous Logic
 with WR_inst(15 downto 12)
@@ -76,7 +76,7 @@ with WF_inst(15 downto 12)
 		(others => '0') when "1010",
 		(others => '1') when others;
 
-Reg_Aval <= Wr_inst(11 downto 8);
+Reg_Aval <= WF_inst(11 downto 8);	-- register address needs to be stable on falling edge, was rising edge
 
 --Process(CLK)
 --Begin

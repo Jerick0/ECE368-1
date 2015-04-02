@@ -38,6 +38,10 @@ entity execute is
 			load_forward	: out std_logic_vector(num_bits-1 downto 0);	-- forwarded half clock cycle faster than load
 			ccr				: out std_logic_vector(num_ccr-1 downto 0);	-- ccr output
 			
+			-- new outputs for delaying store information
+			store_data		: out std_logic_vector(num_bits-1 downto 0);
+			store_addr		: out std_logic_vector(addr_size-1 downto 0);
+			
 			-- control signals
 			op_code		: in std_logic_vector(num_opcode-1 downto 0);	-- op code
 			store_en		: in std_logic_vector(0 downto 0);					-- enable a store operation (enable ram to a write)
@@ -98,6 +102,14 @@ begin
 						clkb		=> read_clock,
 						addrb		=> operand_b(addr_size-1 downto 0),
 						doutb		=> data_out);
+
+	store_delay:	entity work.store_word_data
+		port map(	store_data_in		=> operand_a,
+						store_addr_in		=> operand_b(addr_size-1 downto 0),
+						store_data_out		=> store_data,
+						store_addr_out		=> store_addr,
+						rst					=> rst,
+						clk					=> clk);
 
 end structural;
 

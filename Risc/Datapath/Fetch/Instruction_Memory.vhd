@@ -43,8 +43,12 @@ LIBRARY XilinxCoreLib;
 ENTITY Instruction_Memory IS
   PORT (
     clka : IN STD_LOGIC;
+    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     addra : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
-    douta : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+    dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    clkb : IN STD_LOGIC;
+    addrb : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
+    doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
   );
 END Instruction_Memory;
 
@@ -53,8 +57,12 @@ ARCHITECTURE Instruction_Memory_a OF Instruction_Memory IS
 COMPONENT wrapped_Instruction_Memory
   PORT (
     clka : IN STD_LOGIC;
+    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     addra : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
-    douta : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+    dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    clkb : IN STD_LOGIC;
+    addrb : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
+    doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
   );
 END COMPONENT;
 
@@ -94,7 +102,7 @@ END COMPONENT;
       c_initb_val => "0",
       c_interface_type => 0,
       c_load_init_file => 1,
-      c_mem_type => 3,
+      c_mem_type => 1,
       c_mux_pipeline_stages => 0,
       c_prim_type => 1,
       c_read_depth_a => 32,
@@ -129,8 +137,12 @@ BEGIN
 U0 : wrapped_Instruction_Memory
   PORT MAP (
     clka => clka,
+    wea => wea,
     addra => addra,
-    douta => douta
+    dina => dina,
+    clkb => clkb,
+    addrb => addrb,
+    doutb => doutb
   );
 -- synthesis translate_on
 

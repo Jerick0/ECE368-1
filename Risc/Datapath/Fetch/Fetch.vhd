@@ -64,9 +64,13 @@ begin
 				 Q => INC_PC);
 	
 	INSTR_MEM: entity work.Instruction_Memory -- Block ROM for Instruction Memory
-	port map( clka => CLK,
-				 addra => PC_INDEX,
-				 douta => INSTR);
+	port map( clkb => CLK,
+				 addrb => PC_INDEX,
+				 doutb => INSTR,
+				 clka => CLK,
+				 addra => (others => '0'),
+				 dina => (others => '0'),
+				 wea(0) => '0');
 				 
 	INSTRUCTION: entity work.GP_register -- Instruction Register
 	generic map( num_bits => 12)

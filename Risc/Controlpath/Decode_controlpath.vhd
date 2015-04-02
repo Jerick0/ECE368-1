@@ -47,27 +47,35 @@ Signal DF_inst		:  STD_LOGIC_VECTOR(15 downto 0);
 begin
 
 D_R		: entity work.GP_register
-			Port Map ( 	CLK 	=> NotCLK,
+			Port Map ( 	--CLK 	=> NotCLK,			-- clocks are reverse
+							CLK	=> CLK,
 							D   	=> D_inst,
 							Q	 	=> DR_inst,
 							Rst	=> RST							);
 							
 D_F		: entity work.GP_register
-			Port Map (	CLK 	=> CLK,
+			Port Map (	--CLK 	=> CLK,					-- clocks are reverse
+							CLK	=> NotClk,
 							D		=> DR_inst,
 							Q		=> DF_inst,
 							RST	=> Rst
 							);
 D_instout <= DF_inst;
 
-process(CLK)
-begin
-	if(CLK'event and CLK='0') then
-		if((DR_inst(15 downto 12) = "0111") or (DR_inst(15 downto 12) = "1000")) then in_mux_sel <= '0'; -- Selects 4-bit Immediate
-		else in_mux_sel <= '1'; -- Otherwise selects 8-bit Immediate
-		end if;
-	end if;
-			
-end process;
+-- attempt at asynchronous logic
+with DR_inst(15 downto 12) 
+	select in_mux_sel <=
+		'0' when "0111" | "1000",
+		'1' when others;
+
+--process(CLK)
+--begin
+--	if(CLK'event and CLK='0') then
+--		if((DR_inst(15 downto 12) = "0111") or (DR_inst(15 downto 12) = "1000")) then in_mux_sel <= '0'; -- Selects 4-bit Immediate
+--		else in_mux_sel <= '1'; -- Otherwise selects 8-bit Immediate
+--		end if;
+--	end if;
+--			
+--end process;
 end Behavioral;
 

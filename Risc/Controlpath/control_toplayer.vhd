@@ -121,14 +121,19 @@ WB_state: entity work.WB_controlpath
 								rst				=> rst
 								);
 								
-WBPlus1_state: entity work.GP_register
-			Port Map ( 	CLK 	=> notCLK,
-							D   	=> W_FtoW1_R,
-							Q	 	=> WBPLus1,
-							Rst	=> Rst
-							);	
+--WBPlus1_state: entity work.GP_register
+--			Port Map ( 	CLK 	=> notCLK,
+--							D   	=> W_FtoW1_R,
+--							Q	 	=> WBPLus1,
+--							Rst	=> Rst
+--							);	
 								
-
+WBPlus1_state: entity work.WBPlus1_controlpath
+			port map(		clk				=> clk,
+								notclk			=> notclk,
+								wbPlus1_inst	=> W_FtoW1_R,
+								wbPlus1_instout=> WBPlus1,
+								rst				=> rst);
 
 
 

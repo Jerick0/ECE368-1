@@ -6,3 +6,15 @@
      - Looks like instruction registers are triggered on wrong (opposite) edge
      - This is odd since the code is the same as the decode module
      - Displayed in OpAcc_Test1.PNG
+
+- Switched all clocks in control path registers only
+
+- believe that register bank is storing junk values too soon
+	- possible enable signals in control path
+
+- write back
+	- wb_instout <= wB_inst;
+	- wb_instout <= wF_inst;
+
+- write back plus one
+	-  added  two register state to match timing issues

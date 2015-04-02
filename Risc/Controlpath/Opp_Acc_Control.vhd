@@ -61,33 +61,42 @@ architecture Behavioral of Opp_Acc_Control is
 
 signal OR_inst : STD_LOGIC_VECTOR(15 downto 0);
 signal OF_inst : STD_LOGIC_VECTOr(15 downto 0);
+signal delay_pc: std_logic_vector(4 downto 0);
 begin
 
 O_R		: entity work.GP_register
-			Port Map ( 	CLK 	=> notCLK,
+			Port Map ( 	CLK 	=> CLK,
 							D   	=> O_inst,
 							Q	 	=> OR_inst,
 							Rst	=> RST
 							);
 							
 O_F		: entity work.GP_register
-			Port Map (	CLK 	=> CLK,
+			Port Map (	CLK 	=> NotCLK,
 							D		=> OR_inst,
 							Q		=> OF_INST,
 							RST	=> RST
 							);
+							
 O_instout <= OF_inst;
  
-process (CLK)
+PC_Delay	: entity work.GP_register
+			generic map( num_bits => 5)
+			port map	(	clk	=>notclk,
+							D		=> PC,
+							Q		=> delay_PC,
+							rst	=> rst);
+--process (CLK)
+process(O_inst, EXEC, WB, WBPLUS1)
 	begin
-	if (CLK'event and CLK ='1')then
-		if(PC = "00010") then -- First Time an Instruction Enters Operand Access	
+	--if (CLK'event and CLK ='1')then
+		if(delay_PC = "00010") then -- First Time an Instruction Enters Operand Access	
 			CNTLA_out <= "000";
 			if ((OF_inst(15 downto 12) = "0101") or (OF_inst(15 downto 12) = "0110") or (OF_inst(15 downto 12) = "0111") or (OF_inst(15 downto 12) = "1000") or 
 			(OF_inst(15 downto 12) = "1001") or (OF_inst(15 downto 12) = "1010")) then CNTLB_out <= "000"; -- Selects Immediate
 			else CNTLB_out <= "001";
 			end if;
-		elsif(PC = "00011")  then -- 2nd Time an Instruction Enters Operand Access
+		elsif(delay_PC = "00011")  then -- 2nd Time an Instruction Enters Operand Access
 			--MUX A
 			if ((EXEC(15 downto 12) = "1001") and (OF_inst(11 downto 8) = EXEC(11 downto 8))) then CNTLA_out <= "001"; -- Selects Load Word Execute
 				
@@ -105,7 +114,7 @@ process (CLK)
 			
 			else CNTLB_out <= "001";
 			end if;
-		elsif(PC = "00100") 	then --Third Time an Instruction Enters Operand Access
+		elsif(delay_PC = "00100") 	then --Third Time an Instruction Enters Operand Access
 			--MUX A
 			if ((EXEC(15 downto 12) = "1001") and (OF_inst(11 downto 8) = EXEC(11 downto 8))) then CNTLA_out <= "001"; -- Selects Load Word Execute
 				
@@ -156,7 +165,7 @@ process (CLK)
 			else CNTLB_out <= "001"; -- Selects Register B
 			end if;
 		end if;
-	end if;
+	--end if;
 end process;
 end Behavioral;
 

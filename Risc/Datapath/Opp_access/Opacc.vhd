@@ -81,7 +81,10 @@ begin
 							 E => Load_EX_F,
 							 F => WB_F,
 							 G => RR_EX_F,
-							 H => WBplus1_F,							 
+							 H => WBplus1_F,
+							 SEL=>Cntl_B,
+							 CLK=>notClock,
+							 O => OP_B);
 
 	
 		 MUX_A: entity work.mux_6to1

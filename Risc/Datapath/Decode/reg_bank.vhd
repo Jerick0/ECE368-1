@@ -23,16 +23,20 @@ entity reg_bank is
 				addr_size :	integer:= 4);	-- number of addressing bits, 16 registers
 	
 	port(	-- input addresses
-			reg_a_addr	:	in std_logic_vector(addr_size-1 downto 0);	-- address of register a to read from
-			reg_b_addr	:	in std_logic_vector(addr_size-1 downto 0);	-- address of register b to read from
-			write_addr	:	in std_logic_vector(addr_size-1 downto 0);	-- address of regsiter to write to
+			reg_a_addr		:	in std_logic_vector(addr_size-1 downto 0);	-- address of register a to read from
+			reg_a_addr_br	:	in std_logic_vector(addr_size-1 downto 0);	-- address of register a to read from for branch
+			reg_b_addr		:	in std_logic_vector(addr_size-1 downto 0);	-- address of register b to read from
+			reg_b_addr_br	:	in std_logic_vector(addr_size-1 downto 0);	-- address of register b to read from for branch
+			write_addr		:	in std_logic_vector(addr_size-1 downto 0);	-- address of regsiter to write to
 			
 			-- input data
 			data_in	:		in std_logic_vector(num_bits-1 downto 0);		-- data to store on write back, when applicable
 			
 			-- output data
 			reg_a		:		out std_logic_vector(num_bits-1 downto 0);	-- data read from register a
+			reg_a_br	:		out std_logic_vector(num_bits-1 downto 0);	-- data read from register a branch
 			reg_b		:		out std_logic_vector(num_bits-1 downto 0);	-- data read from register b
+			reg_b_br	:		out std_logic_vector(num_bits-1 downto 0);	-- data read from register b branch
 			
 			-- control signals
 			rst		:		in std_logic;											-- universal reset
@@ -65,6 +69,9 @@ begin
 		if (clk'event and clk = '1') then 		-- on the rigsing edge
 				reg_a <= reg_collection(to_integer(unsigned(reg_a_addr)));		
 				reg_b <= reg_collection(to_integer(unsigned(reg_b_addr)));
+				
+				reg_a_br	<= reg_collection(to_integer(unsigned(reg_a_addr_br)));
+				reg_b_br	<= reg_collection(to_integer(unsigned(reg_b_addr_br)));
 		end if;
 	end process;
 	

@@ -31,7 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity control_toplayer is
     Port ( instruction_fetch 		: in  STD_LOGIC_Vector(15 downto 0);
-					PC						: in STD_LOGIC_VECTOR(4 downto 0);
+					PC						: in STD_LOGIC_VECTOR(12 downto 0);
 					CLK 					: in  STD_LOGIC;
 					Rst 					: in  STD_LOGIC;
 					e_opcode 			: out  STD_LOGIC_Vector(3 downto 0);

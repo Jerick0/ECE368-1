@@ -24,7 +24,7 @@ use work.all;
 entity datapath is
 	generic(	num_bits			: integer:=16;			-- number of bits to a word
 				instruct_size	: integer:=16;			-- size of an instruction
-				pc_size			: integer:=5;
+				pc_size			: integer:=13;
 				immediate_L		: integer:=8;
 				immediate_S		: integer:=4;
 				ccr_size			: integer:=4;
@@ -36,9 +36,18 @@ entity datapath is
 			rst					: in std_logic;												-- system reset
 			
 			-- fetch inputs
+			f_push_notPop			: in std_logic;
+			f_push_notPop_br		: in std_logic;
+			f_enable					: in std_logic;
+			f_enable_br				: in std_logic;
+			f_merge					: in std_logic;
+			f_enable_merge			: in std_logic;
+			f_sel						: in std_logic_vector(1 downto 0);
+			f_sel_br					: in std_logic_vector(2 downto 0);
 			
 			-- decode inputs
 			d_im_mux_sel		: in std_logic;												-- immediate value mux selector
+			d_im_mux_sel_br	: in std_logic;
 			
 			-- operand access inputs
 			o_opA_mux_sel		: in std_logic_vector(2 downto 0);						-- operand a mux selector
@@ -56,6 +65,7 @@ entity datapath is
 			-- outputs
 			pc						: out std_logic_vector(pc_size-1 downto 0);
 			instruction_fetch	: out std_logic_vector(instruct_size-1 downto 0);
+			instruction_fetch_br : out std_logic_vector(instruct_size-1 downto 0);
 			wb_result			: out std_logic_vector(num_bits-1 downto 0);
 			ccr_result			: out std_logic_vector(ccr_size-1 downto 0);
 			store_result		: out std_logic_vector(num_bits-1 downto 0);
@@ -69,12 +79,19 @@ architecture structural of datapath is
 	signal reg_b	: std_logic_vector(addr_size-1 downto 0);
 	signal im_S		: std_logic_vector(immediate_S-1 downto 0);
 	signal im_L		: std_logic_vector(immediate_L-1 downto 0);
+	signal reg_a_s	: std_logic_vector(addr_size-1 downto 0);
+	signal reg_b_s	: std_logic_vector(addr_size-1 downto 0);
+	signal im_S_s	: std_logic_vector(immediate_S-1 downto 0);
+	signal im_L_s	: std_logic_vector(immediate_L-1 downto 0);
 	
 	-- signals bewteen decode and operand access
 	signal result_reg_a		: std_logic_vector(num_bits-1 downto 0);
 	signal result_reg_b		: std_logic_vector(num_bits-1 downto 0);
 	signal result_im			: std_logic_vector(num_bits-1 downto 0);
 	signal result_wbPlusOne	: std_logic_vector(num_bits-1 downto 0);
+	signal result_reg_a_br	: std_logic_vector(num_bits-1 downto 0);
+	signal result_reg_b_br	: std_logic_vector(num_bits-1 downto 0);
+	signal result_im_br			: std_logic_vector(num_bits-1 downto 0);
 	
 	-- signals forwarded to operand access
 	--			should be four total forwarded results
@@ -103,6 +120,7 @@ begin
 	---------------------------------------------------------------
 	-- fetch unit
 	im_L	<= reg_b & im_S;		-- signal concat after fetch into decode
+	im_L_s<= reg_b_s & im_S_s;
 	
 	fetch_unit: entity work.fetch
 		port map(	clk				=> clk,
@@ -111,7 +129,19 @@ begin
 						rb					=> reg_b,
 						ra					=> reg_a,
 						progC				=> pc,
-						inst				=> instruction_fetch);
+						inst				=> instruction_fetch,
+						imm_branch		=> im_S_s,
+						rb_branch		=> reg_b_s,
+						ra_branch		=> reg_a_s,
+						inst_branch		=> instruction_fetch_br,
+						push_notPop		=> f_push_notPop,
+						push_notPop_branch => f_push_notPop_br,
+						enable			=> f_enable,
+						enable_branch	=> f_enable_br,
+						merge				=> f_merge,
+						enable_merge	=> f_enable_merge,
+						sel				=> f_sel,
+						sel_branch		=> f_sel_br);
 	
 	---------------------------------------------------------------
 	-- decode unit
@@ -119,14 +149,21 @@ begin
 		port map(	addr_reg_a		=> reg_a,
 						addr_reg_b		=> reg_b,
 						immediate		=> im_L,
+						addr_reg_a_br	=> reg_a_s,
+						addr_reg_b_br	=> reg_b_s,
+						immediate_br	=> im_L_s,
 						store_addr		=> wb_reg_addr,
 						store_data		=> wb_data,
 						reg_a				=> result_reg_a,
 						reg_b				=> result_reg_b,
 						immediate_out	=> result_im,
+						reg_a_br			=> result_reg_a_br,
+						reg_b_br			=> result_reg_a_br,
+						immediate_out_br=> result_im_br,
 						wbPlusOne		=> result_wbPlusOne,
 						store_enable	=> wb_sd_enable,
 						sel				=> d_im_mux_sel,
+						sel_br			=> d_im_mux_sel_br,
 						rst				=> rst,
 						clk				=> clk);
 	
@@ -134,8 +171,11 @@ begin
 	-- operand access unit
 	opAccess_unit: entity work.opacc
 		port map(	decode_reg		=> result_im,
+						decode_reg_br	=> result_im_br,
 						reg_b				=> result_reg_b,
+						reg_b_br			=> result_reg_b_br,
 						reg_a				=> result_reg_a,
+						reg_a_br			=> result_reg_a_br,
 						load_ex_f		=> lw_ex,
 						wb_f				=> wb_data,
 						rr_ex_f			=> rr_ex,

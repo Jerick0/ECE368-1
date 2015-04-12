@@ -84,7 +84,8 @@ begin
 							 H => WBplus1_F,
 							 SEL=>Cntl_B,
 							 CLK=>notClock,
-							 O => OP_B);
+							 O => OP_B,
+							 rst=>rst);
 
 	
 		 MUX_A: entity work.mux_6to1
@@ -96,7 +97,8 @@ begin
 							 F => WBplus1_F,
 							 SEL => Cntl_A,
 							 CLK =>notclock,
-							 O => OP_A);
+							 O => OP_A,
+							 rst=>rst);
 							 
 		 
 --		MUX_B: entity work.mux_6to1

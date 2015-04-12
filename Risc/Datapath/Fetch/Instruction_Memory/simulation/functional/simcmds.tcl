@@ -57,8 +57,11 @@ wave add /Instruction_Memory_tb/status
       wave add  /Instruction_Memory_tb/Instruction_Memory_synth_inst/BMG_PORT/ADDRA
       wave add  /Instruction_Memory_tb/Instruction_Memory_synth_inst/BMG_PORT/DINA
       wave add  /Instruction_Memory_tb/Instruction_Memory_synth_inst/BMG_PORT/WEA
+      wave add  /Instruction_Memory_tb/Instruction_Memory_synth_inst/BMG_PORT/DOUTA
       wave add  /Instruction_Memory_tb/Instruction_Memory_synth_inst/BMG_PORT/CLKB
       wave add  /Instruction_Memory_tb/Instruction_Memory_synth_inst/BMG_PORT/ADDRB
+      wave add  /Instruction_Memory_tb/Instruction_Memory_synth_inst/BMG_PORT/DINB
+      wave add  /Instruction_Memory_tb/Instruction_Memory_synth_inst/BMG_PORT/WEB
       wave add  /Instruction_Memory_tb/Instruction_Memory_synth_inst/BMG_PORT/DOUTB
 run all
 quit

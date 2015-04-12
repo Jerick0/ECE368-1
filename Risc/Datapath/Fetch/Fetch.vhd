@@ -34,52 +34,58 @@ use work.all;
 --use UNISIM.VComponents.all;
 
 entity Fetch is
-	Port ( CLK,RST : in STD_LOGIC; --Clock and Reset
-			 IMM: OUT STD_LOGIC_VECTOR (3 downto 0); --Immediate operand
-			 RB: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register B Address
-			 RA: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register A Address
-			 ProgC : OUT STD_LOGIC_VECTOR (4 downto 0);
-			 INST : OUT STD_LOGIC_VECTOR (15 downto 0)); -- Instruction
+	generic	(	inst_size			: integer := 16;
+					inst_addr_size		: integer := 13);
+					
+	port		(	CLK,RST 	: in STD_LOGIC; --Clock and Reset
+					IMM		: OUT STD_LOGIC_VECTOR (3 downto 0); --Immediate operand
+					RB			: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register B Address
+					RA			: OUT STD_LOGIC_VECTOR (3 downto 0); -- Register A Address
+					ProgC 	: OUT STD_LOGIC_VECTOR (inst_addr_size-1 downto 0);
+					INST 		: OUT STD_LOGIC_VECTOR (inst_size-1 downto 0)); -- Instruction
 end Fetch;
 
 architecture Structural of Fetch is
 
-	signal INSTR: STD_LOGIC_VECTOR (15 downto 0) := (others => '0'); -- Wires connecting Instruction Memory to Instruction Register
-	signal PC_INDEX, INC_PC  : STD_LOGIC_VECTOR (4 downto 0) := (others => '0');
+	signal INSTR: STD_LOGIC_VECTOR (inst_size-1 downto 0) := (others => '0'); -- Wires connecting Instruction Memory to Instruction Register
+	signal PC_INDEX, INC_PC  : STD_LOGIC_VECTOR (inst_addr_size-1 downto 0) := (others => '0');
 	
 begin
 	INST <= INSTR; --Instruction output
 	ProgC <= PC_INDEX; -- Program Counter Output
 	
 	PC: entity work.GP_register -- Program Counter Register
-	generic map (num_bits => 5)
-	port map( CLK => CLK,
-				 RST => RST,
-				 D => INC_PC,
-				 Q => PC_INDEX);
+	generic map (	num_bits => inst_addr_size)
+	port map		( 	CLK 		=> CLK,
+						RST 		=> RST,
+						D 			=> INC_PC,
+						Q 			=> PC_INDEX);
 				 
  	INC: entity work.Incrementer -- Incrementer
-	
- 	port map( D => PC_INDEX,
-				 Q => INC_PC);
+	generic map (	inst_addr_size => inst_addr_size)
+ 	port map		(	D 					=> PC_INDEX,
+						Q 					=> INC_PC);
 	
 	INSTR_MEM: entity work.Instruction_Memory -- Block ROM for Instruction Memory
-	port map( clkb => CLK,
-				 addrb => PC_INDEX,
-				 doutb => INSTR,
-				 clka => CLK,
-				 addra => (others => '0'),
-				 dina => (others => '0'),
-				 wea(0) => '0');
+	port map(clka		=> CLK,
+				wea(0) 	=> '0',
+				addra		=> PC_INDEX,
+				dina		=> (others => '0'),
+				douta 	=> INSTR,
+				clkb 		=> CLK,
+				web(0) 	=> '0',
+				addrb 	=> (others => '0'),
+				dinb 		=> (others => '0'),
+				doutb		=>	);
 				 
 	INSTRUCTION: entity work.GP_register -- Instruction Register
-	generic map( num_bits => 12)
-	port map( CLK => CLK,
-				 RST => RST,
-				 D => INSTR (11 downto 0),
-				 Q(11 downto 8) => RA,
-				 Q(7 downto 4) => RB,
-				 Q(3 downto 0) => IMM);
+	generic map	( 	num_bits 		=> 12)
+	port map		( 	CLK 				=> CLK,
+						RST 				=> RST,
+						D 					=> INSTR (11 downto 0),
+						Q(11 downto 8) => RA,
+						Q(7 downto 4) 	=> RB,
+						Q(3 downto 0) 	=> IMM);
 				 
 end Structural;
 

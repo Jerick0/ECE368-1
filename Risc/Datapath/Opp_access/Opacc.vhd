@@ -74,14 +74,14 @@ begin
 
 
 		MUX_B: entity work.mux_8to1
-				Port map( A => Decode_Reg,
-							 B => Decode_Reg_BR,
-							 C => Reg_B,
-							 D => Reg_B_BR,
-							 E => Load_EX_F,
-							 F => WB_F,
-							 G => RR_EX_F,
-							 H => WBplus1_F,
+				Port map( A => Decode_Reg,							 
+							 B => Reg_B,
+							 C => Load_EX_F,
+							 D => WB_F,
+							 E => RR_EX_F,
+							 F => WBplus1_F,
+							 G => Decode_Reg_BR,
+							 H => Reg_B_BR,
 							 SEL=>Cntl_B,
 							 CLK=>notClock,
 							 O => OP_B);
@@ -89,14 +89,15 @@ begin
 	
 		 MUX_A: entity work.mux_6to1
 				Port map( A => Reg_A,
-							 B =>	Reg_A_BR,
-							 C => Load_EX_F,							 
-							 D => WB_F,
-							 E => RR_EX_F,
-							 F => WBplus1_F,
+							 B => Load_EX_F,							 
+							 C => WB_F,
+							 D => RR_EX_F,
+							 E => WBplus1_F,
+							 F => Reg_A_Br,
 							 SEL => Cntl_A,
 							 CLK =>notclock,
-							 O => OP_A);
+							 O => OP_A,
+							 rst =>rst );
 							 
 		 
 --		MUX_B: entity work.mux_6to1

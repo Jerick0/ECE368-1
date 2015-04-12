@@ -83,21 +83,7 @@ begin
 							 G => RR_EX_F,
 							 H => WBplus1_F,							 
 
-		MUX_B: entity work.mux_6to1
-				Port map( A => decode,
-							 B => register_b,
-							 C => load_forward,
-							 D => wb_forward,
-							 E => rr_forward,
-							 F => wbplus1_forward,							 
-
-							 SEL => Cntl_B,
-							 CLK => notclock,
-							 O => OP_B,
-							 rst=> rst
-							 );
-		 
-
+	
 		 MUX_A: entity work.mux_6to1
 				Port map( A => Reg_A,
 							 B =>	Reg_A_BR,
@@ -109,17 +95,7 @@ begin
 							 CLK =>notclock,
 							 O => OP_A);
 							 
-		 MUX_A: entity work.mux_5to1
-				Port map( A => register_a,
-							 B => load_forward,							 
-							 C => wb_forward,
-							 D => rr_forward,
-							 E => wbplus1_forward,
-							 SEL => Cntl_A,
-							 EN =>notclock,
-							 OUTP => OP_A,
-							 rst => rst);
-
+		 
 --		MUX_B: entity work.mux_6to1
 --				Port map( A => Decode_Reg,
 --							 B => Reg_B,

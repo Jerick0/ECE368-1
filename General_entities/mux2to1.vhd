@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: Logan Doonan
 -- 
 -- Create Date:    15:32:54 03/18/2015 
 -- Design Name: 
@@ -36,7 +36,8 @@ entity mux2to1 is
 			IN_1		: in		std_logic_vector(num_bits-1 downto 0);
 			IN_2		: in 		std_logic_vector(num_bits-1 downto 0);
 			O	 		: out  	STD_LOGIC_VECTOR(num_bits-1 downto 0);
-			SEL 		: in 		std_logic
+			SEL 		: in 		std_logic;
+			rst		: in 		std_logic
 			);
 			
 end mux2to1;
@@ -47,12 +48,16 @@ begin
 	Process(CLK)
 		begin
 		if (CLK'event and CLK='1') then
+			if (rst = '1') then
+				O <= (others => '0');
+			else
 				case SEL is
 					when '0' =>O<=IN_1;
 					when '1' =>O<=IN_2;
 					when others =>O<=(others=>'0');
 					
 				end case;
+			end if;
 		end if;
 	end process;
 end behavioral;

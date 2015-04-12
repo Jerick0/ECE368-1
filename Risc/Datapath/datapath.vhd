@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: Chris Camara
 -- 
 -- Create Date:    18:53:58 03/19/2015 
 -- Design Name: 
@@ -24,7 +24,7 @@ use work.all;
 entity datapath is
 	generic(	num_bits			: integer:=16;			-- number of bits to a word
 				instruct_size	: integer:=16;			-- size of an instruction
-				pc_size			: integer:=14;
+				pc_size			: integer:=5;
 				immediate_L		: integer:=8;
 				immediate_S		: integer:=4;
 				ccr_size			: integer:=4;
@@ -89,6 +89,8 @@ architecture structural of datapath is
 	-- signals between execute and writeback
 	signal alu_out		: std_logic_vector(num_bits-1 downto 0);
 	signal load_out	: std_logic_vector(num_bits-1 downto 0);
+	signal store_data	: std_logic_vector(num_bits-1 downto 0);
+	signal store_addr	: std_logic_vector(immediate_L-1 downto 0);
 	
 	-- signals between write back and decode
 	--			Also needs to go to operand access
@@ -97,8 +99,6 @@ architecture structural of datapath is
 begin
 	-- output signals
 	wb_result 		<= wb_data;
-	store_result	<= operand_a;
-	store_offset	<= operand_b(immediate_L-1 downto 0);
 
 	---------------------------------------------------------------
 	-- fetch unit
@@ -144,7 +144,8 @@ begin
 						cntl_b			=> o_opB_mux_sel,
 						clk				=> clk,
 						op_a				=> operand_a,
-						op_b				=> operand_b);
+						op_b				=> operand_b,
+						rst				=> rst);
 	
 	---------------------------------------------------------------
 	-- execute unit
@@ -156,6 +157,8 @@ begin
 						load				=> load_out,
 						load_forward	=> lw_ex,
 						ccr				=> ccr_result,
+						store_data		=> store_data,
+						store_addr		=> store_addr,
 						op_code			=> e_opcode,
 						store_en			=> e_sw_enable,
 						rst				=> rst,
@@ -166,9 +169,14 @@ begin
 	writeback_unit: entity work.write_back
 		port map(	alu_result		=> alu_out,
 						load_result		=> load_out,
+						store_data		=> store_data,
+						store_addr		=> store_addr,
 						writeback_out	=> wb_data,
+						store_data_out	=> store_result,
+						store_addr_out	=> store_offset,
 						clk				=> clk,
-						sel				=> wb_data_mux_sel);
+						sel				=> wb_data_mux_sel,
+						rst				=> rst);
 	
 end structural;
 

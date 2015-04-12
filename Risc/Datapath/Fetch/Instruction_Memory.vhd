@@ -43,8 +43,15 @@ LIBRARY XilinxCoreLib;
 ENTITY Instruction_Memory IS
   PORT (
     clka : IN STD_LOGIC;
-    addra : IN STD_LOGIC_VECTOR(13 DOWNTO 0);
-    douta : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    douta : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+    clkb : IN STD_LOGIC;
+    web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addrb : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+    dinb : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
   );
 END Instruction_Memory;
 
@@ -53,16 +60,23 @@ ARCHITECTURE Instruction_Memory_a OF Instruction_Memory IS
 COMPONENT wrapped_Instruction_Memory
   PORT (
     clka : IN STD_LOGIC;
-    addra : IN STD_LOGIC_VECTOR(13 DOWNTO 0);
-    douta : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+    wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    douta : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+    clkb : IN STD_LOGIC;
+    web : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+    addrb : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+    dinb : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
   );
 END COMPONENT;
 
 -- Configuration specification
   FOR ALL : wrapped_Instruction_Memory USE ENTITY XilinxCoreLib.blk_mem_gen_v7_3(behavioral)
     GENERIC MAP (
-      c_addra_width => 14,
-      c_addrb_width => 14,
+      c_addra_width => 13,
+      c_addrb_width => 13,
       c_algorithm => 1,
       c_axi_id_width => 4,
       c_axi_slave_type => 0,
@@ -94,11 +108,11 @@ END COMPONENT;
       c_initb_val => "0",
       c_interface_type => 0,
       c_load_init_file => 1,
-      c_mem_type => 3,
+      c_mem_type => 2,
       c_mux_pipeline_stages => 0,
       c_prim_type => 1,
-      c_read_depth_a => 9999,
-      c_read_depth_b => 9999,
+      c_read_depth_a => 8192,
+      c_read_depth_b => 8192,
       c_read_width_a => 16,
       c_read_width_b => 16,
       c_rst_priority_a => "CE",
@@ -110,13 +124,13 @@ END COMPONENT;
       c_use_bram_block => 0,
       c_use_byte_wea => 0,
       c_use_byte_web => 0,
-      c_use_default_data => 1,
+      c_use_default_data => 0,
       c_use_ecc => 0,
       c_use_softecc => 0,
       c_wea_width => 1,
       c_web_width => 1,
-      c_write_depth_a => 9999,
-      c_write_depth_b => 9999,
+      c_write_depth_a => 8192,
+      c_write_depth_b => 8192,
       c_write_mode_a => "WRITE_FIRST",
       c_write_mode_b => "WRITE_FIRST",
       c_write_width_a => 16,
@@ -129,8 +143,15 @@ BEGIN
 U0 : wrapped_Instruction_Memory
   PORT MAP (
     clka => clka,
+    wea => wea,
     addra => addra,
-    douta => douta
+    dina => dina,
+    douta => douta,
+    clkb => clkb,
+    web => web,
+    addrb => addrb,
+    dinb => dinb,
+    doutb => doutb
   );
 -- synthesis translate_on
 

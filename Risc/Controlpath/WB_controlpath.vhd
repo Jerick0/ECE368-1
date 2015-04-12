@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: Josh Erick
 -- 
 -- Create Date:    16:58:09 03/20/2015 
 -- Design Name: 
@@ -36,7 +36,8 @@ entity WB_controlpath is
            En_StoreData : out  STD_LOGIC_Vector(0 downto 0);
            WB_mux : out  STD_LOGIC;
 			  CLK		:	in STD_LOGIC;
-			  NotCLK	: 	in STD_LOGIC
+			  NotCLK	: 	in STD_LOGIC;
+			  rst		: in STD_LOGIC
 			  );
 end WB_controlpath;
 
@@ -47,41 +48,54 @@ Signal WF_inst : STD_LOGIC_VECTOR(15 downto 0);
 begin
 
 W_R		: entity work.GP_register
-			Port Map ( 	CLK 	=> CLK,
+			Port Map ( 	--CLK 	=> notCLK,			-- switched clocks
+							CLk	=> clk,				
 							D   	=> WB_inst,
 							Q	 	=> WR_inst,
-							Rst	=> '0'
+							Rst	=> rst
 							);
 							
 W_F		: entity work.GP_register
-			Port Map (	CLK 	=> NotCLK,
+			Port Map (	--CLK 	=> CLK,
+							Clk	=> notclk,
 							D		=> WR_inst,
 							Q		=> WF_inst,
-							RST	=> '0'
+							RST	=> rst
 							);
 							
-WB_instout <= WF_inst;
+			WB_instout <= WF_inst;			-- switched was WB_inst
 
-Process(CLK)
-Begin
-		if (CLK'event and CLK='1')then
+-- Asynchronous Logic
+with WR_inst(15 downto 12)
+	select WB_Mux <=
+		'1' when "1001",
+		'0' when others;
 		
-			Reg_Aval <= WR_inst(11 downto 8);
-			
-			if WR_inst(15 downto 12) = "1001" then WB_mux <= '1';
-			else WB_mux <='0';
-			end if;
-		end if;
-end process;
+with WF_inst(15 downto 12)
+	select En_StoreData <=
+		(others => '0') when "1010",
+		(others => '1') when others;
 
-Process(CLK)
-Begin
-		if (CLK'event and CLK='0')then
-			if WF_inst(15 downto 12) = "1010" then En_StoreData <= (others => '0');
-				else EN_StoreData <=(others => '1');
-			end if;
-		end if;
-end process;
+Reg_Aval <= WF_inst(11 downto 8);	-- register address needs to be stable on falling edge, was rising edge
+
+--Process(CLK)
+--Begin
+--		if (CLK'event and CLK='0')then
+--			if WR_inst(15 downto 12) = "1001" then WB_mux <= '1';
+--			else WB_mux <='0';
+--			end if;
+--		end if;
+--end process;
+--
+--Process(CLK)
+--Begin
+--		if (CLK'event and CLK='1')then
+--			if WF_inst(15 downto 12) = "1010" then En_StoreData <= (others => '0');
+--				else EN_StoreData <=(others => '1');
+--				end if;
+--				Reg_Aval <= WR_inst(11 downto 8);
+--		end if;
+--end process;
 
 
 

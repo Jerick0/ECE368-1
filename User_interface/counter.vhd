@@ -32,16 +32,15 @@ architecture Behavioral of counter is
 
     signal pointer : integer range 0 to num_instruct-1 := 0;
     begin
-        process (CLK, RST)
+        process (CLK, INC, RST)
         begin
             if (RST = '1') then 
                     pointer <= 0;
-            elsif (CLK'event and CLK = '1') then
-                if INC = '1' then
-                    pointer <= pointer + 1;
-					 elsif pointer > 15 then
-							pointer <= 0;
-                end if;
+            elsif (INC'event and INC = '1') then
+               pointer <= pointer + 1;
+					if pointer > 15 then
+						pointer <= 0;
+               end if;
             end if;
         end process;
     COUNT_OUT <= STD_LOGIC_VECTOR(TO_UNSIGNED(pointer,8));

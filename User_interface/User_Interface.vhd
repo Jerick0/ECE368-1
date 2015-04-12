@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: 
--- Engineer: 
+-- Engineer: Logan Doonan
 -- 
 -- Create Date:    17:57:20 03/21/2015 
 -- Design Name: 
@@ -32,6 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity User_Interface is
 		Port (CLK		: in		STD_LOGIC;
 				BTN		: in		STD_LOGIC;
+				WE			: in		STD_LOGIC;
 				OPCODE	: in		STD_LOGIC_VECTOR (3 downto 0);
 				WB			: in		STD_LOGIC_VECTOR (15 downto 0);
 				SW			: in		STD_LOGIC_VECTOR (15 downto 0);
@@ -39,7 +40,9 @@ entity User_Interface is
 				DP			: out		STD_LOGIC;
 				SEG		: out		STD_LOGIC_VECTOR (6 downto 0);
 				AN			: out		STD_LOGIC_VECTOR (3 downto 0);
-				LED		: out		STD_LOGIC_VECTOR (7 downto 0));
+				LED		: out		STD_LOGIC_VECTOR (7 downto 0);
+				DEBUG 	: out STD_LOGIC_VECTOR(15 downto 0)
+				);
 end User_Interface;
 
 architecture Behavioral of User_Interface is
@@ -55,6 +58,7 @@ architecture Behavioral of User_Interface is
 begin
 		LED <= LED_I;
 		RST <= RST_I;
+		DEBUG <= sseg;
 		
 		RST_L:entity work.rst_logic
 		port map(CLK			=>	CLK,
@@ -91,7 +95,7 @@ begin
 		RSLT_BANK:entity work.result_bank
 		port map(CLK			=>	CLK,
 					RST			=> RST_I,
-					W_EN(0)		=> debounced,
+					W_EN(0)		=> WE,
 					READ_ADDR	=> LED_I,
 					DATA_IN		=>	dat,
 					DATA_OUT		=> sseg);

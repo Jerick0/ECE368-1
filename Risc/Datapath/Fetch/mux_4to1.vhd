@@ -29,7 +29,6 @@ entity mux_4to1 is
 					C 			: in  STD_LOGIC_Vector(num_bits-1 downto 0);
 					D 			: in  STD_LOGIC_Vector(num_bits-1 downto 0);        
 					SEL 		: in  STD_LOGIC_Vector(1 downto 0);
-					CLK 		: in 	STD_LOGIC;
 					O 			: out  STD_LOGIC_Vector(num_bits-1 downto 0);
 					rst		: in std_logic);
 end mux_4to1;

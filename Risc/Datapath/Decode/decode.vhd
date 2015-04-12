@@ -103,8 +103,6 @@ begin
 						 in_2				=>immediate_8_Br,
 						 o					=>im_mux_br,
 						 sel				=>sel_br);
-						sel				=> sel,
-						rst				=> rst);
 
 	
 	register_mux: entity work.GP_register

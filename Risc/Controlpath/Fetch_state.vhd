@@ -30,25 +30,29 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Fetch_state is
-    Port ( F_inst : in  STD_LOGIC_VECTOR(15 downto 0);
-           PC_mux out : out  STD_LOGIC_vector(2 downto 0);
-           Stack_out : out  STD_LOGIC_vector(2 downto 0));
+    Port ( F_inst 		: in  STD_LOGIC_VECTOR(15 downto 0);
+			  CLK				: in 	STD_LOGIC;
+           PC_mux 		: out  STD_LOGIC_vector(2 downto 0);
+           Stack_out 	: out  STD_LOGIC_vector(2 downto 0));
 end Fetch_state;
 
 architecture Behavioral of Fetch_state is
 
 begin
+Process (CLK)
+Begin
 	If F_inst(15 downto 12)= x"D" then									--Jump and Link
 --			PC_mux <= ?? immidiate value;
 --	else 	PC_mux <=??; incrimented value
 --			current PC goes to stack
-   else if F_inst(15 downto 12) = x"E" then 							--Return
+		else if F_inst(15 downto 12) = x"E" then 							--Return
 --			PC_mux <= ?? stack-pointer minus 1
 
 
+		end if;
 	end if;
 
-
+End Process;
 
 end Behavioral;
 

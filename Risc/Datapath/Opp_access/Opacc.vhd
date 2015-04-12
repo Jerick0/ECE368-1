@@ -31,8 +31,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Opacc is
     Port ( Decode_Reg 		: in  STD_LOGIC_Vector(15 downto 0);
+			  Decode_Reg_Br	: in  STD_LOGIC_Vector(15 downto 0);
            Reg_B 				: in  STD_LOGIC_Vector(15 downto 0);
+			  Reg_B_Br			: in  STD_LOGIC_Vector(15 downto 0);
            Reg_A				: in  STD_LOGIC_Vector(15 downto 0);
+			  Reg_A_Br			: in  STD_LOGIC_Vector(15 downto 0);
            Load_EX_F 		: in  STD_LOGIC_Vector(15 downto 0);
            WB_F 				: in  STD_LOGIC_Vector(15 downto 0);			  
 			  RR_EX_F 			: in  STD_LOGIC_Vector(15 downto 0);           
@@ -51,27 +54,30 @@ architecture Behavioral of Opacc is
 begin
 notclock<=not clk;
 
-		MUX_B: entity work.mux_6to1
+		MUX_B: entity work.mux_8to1
 				Port map( A => Decode_Reg,
-							 B => Reg_B,
-							 C => Load_EX_F,
-							 D => WB_F,
-							 E => RR_EX_F,
-							 F => WBplus1_F,							 
+							 B => Decode_Reg_BR,
+							 C => Reg_B,
+							 D => Reg_B_BR,
+							 E => Load_EX_F,
+							 F => WB_F,
+							 G => RR_EX_F,
+							 H => WBplus1_F,							 
 							 SEL => Cntl_B,
 							 CLK => notclock,
 							 O => OP_B
 							 );
 		 
-		 MUX_A: entity work.mux_5to1
+		 MUX_A: entity work.mux_6to1
 				Port map( A => Reg_A,
-							 B => Load_EX_F,							 
-							 C => WB_F,
-							 D => RR_EX_F,
-							 E => WBplus1_F,
+							 B =>	Reg_A_BR,
+							 C => Load_EX_F,							 
+							 D => WB_F,
+							 E => RR_EX_F,
+							 F => WBplus1_F,
 							 SEL => Cntl_A,
-							 EN =>notclock,
-							 OUTP => OP_A);
+							 CLK =>notclock,
+							 O => OP_A);
 							 
 							 
 							 

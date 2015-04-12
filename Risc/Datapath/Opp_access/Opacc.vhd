@@ -72,56 +72,34 @@ begin
 	rr_forward <= rr_ex_f;
 	wbplus1_forward <= wbplus1_f;
 
-<<<<<<< HEAD
+
 		MUX_B: entity work.mux_8to1
-				Port map( A => Decode_Reg,
-							 B => Decode_Reg_BR,
-							 C => Reg_B,
-							 D => Reg_B_BR,
-							 E => Load_EX_F,
-							 F => WB_F,
-							 G => RR_EX_F,
-							 H => WBplus1_F,							 
-=======
-		MUX_B: entity work.mux_6to1
-				Port map( A => decode,
-							 B => register_b,
-							 C => load_forward,
-							 D => wb_forward,
-							 E => rr_forward,
-							 F => wbplus1_forward,							 
->>>>>>> 99f997779a8985f29ce33e3c00b8b33564ff4527
-							 SEL => Cntl_B,
-							 CLK => notclock,
-							 O => OP_B,
-							 rst=> rst
-							 );
-		 
-<<<<<<< HEAD
-		 MUX_A: entity work.mux_6to1
-				Port map( A => Reg_A,
-							 B =>	Reg_A_BR,
-							 C => Load_EX_F,							 
+				Port map( A => Decode_Reg,							 
+							 B => Reg_B,
+							 C => Load_EX_F,
 							 D => WB_F,
 							 E => RR_EX_F,
 							 F => WBplus1_F,
+							 G => Decode_Reg_BR,
+							 H => Reg_B_BR,
+							 SEL=>Cntl_B,
+							 CLK=>notClock,
+							 O => OP_B);
+
+	
+		 MUX_A: entity work.mux_6to1
+				Port map( A => Reg_A,
+							 B => Load_EX_F,							 
+							 C => WB_F,
+							 D => RR_EX_F,
+							 E => WBplus1_F,
+							 F => Reg_A_Br,
 							 SEL => Cntl_A,
 							 CLK =>notclock,
-							 O => OP_A);
+							 O => OP_A,
+							 rst =>rst );
 							 
-=======
-		 MUX_A: entity work.mux_5to1
-				Port map( A => register_a,
-							 B => load_forward,							 
-							 C => wb_forward,
-							 D => rr_forward,
-							 E => wbplus1_forward,
-							 SEL => Cntl_A,
-							 EN =>notclock,
-							 OUTP => OP_A,
-							 rst => rst);
->>>>>>> 99f997779a8985f29ce33e3c00b8b33564ff4527
-							 
+		 
 --		MUX_B: entity work.mux_6to1
 --				Port map( A => Decode_Reg,
 --							 B => Reg_B,
@@ -148,4 +126,3 @@ begin
 							 
 
 end Behavioral;
-

@@ -46,7 +46,7 @@ entity decode is
 			wbPlusOne			: out std_logic_vector(num_bits-1 downto 0);		-- forwarded value provided to operand access
 			
 			-- control signals
-			store_enable	: in std_logic_vector(0 downto 0);					-- enable a store (disabled on a store word instruction
+			store_enable	: in std_logic_vector(0 downto 0);				-- enable a store (disabled on a store word instruction
 			sel				: in std_logic;											-- selector for decode mux of immediate values
 			sel_Br			: in std_logic;											-- selector for decode mux of immediate values
 			rst				: in std_logic;											-- reset line
@@ -94,7 +94,6 @@ begin
 						in_1				=> immediate_4,		-- switched immediate values around to match control path logic
 						in_2				=> immediate_8,
 						o					=> im_mux,
-<<<<<<< HEAD
 						sel				=> sel);
 						
 	decode_mux_Br: entity work.mux2to1
@@ -104,10 +103,9 @@ begin
 						 in_2				=>immediate_8_Br,
 						 o					=>im_mux_br,
 						 sel				=>sel_br);
-=======
 						sel				=> sel,
 						rst				=> rst);
->>>>>>> 8ffc16d3303c95627ce3d34796bd079470a91bc4
+
 	
 	register_mux: entity work.GP_register
 		generic map(num_bits			=> immediate_L)

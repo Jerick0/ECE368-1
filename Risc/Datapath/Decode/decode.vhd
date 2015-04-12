@@ -31,6 +31,7 @@ entity decode is
 			addr_reg_a		: in std_logic_vector(addr_size-1 downto 0);		-- register bank address for operand a
 			addr_reg_b		: in std_logic_vector(addr_size-1 downto 0);		-- register bank address for operand b
 			immediate		: in std_logic_vector(immediate_L-1 downto 0);	-- immediate 8 bit value to be taken in, break up into separate immediate values
+			immediate_Br	: in std_logic_vector(immediate_L-1 downto 0);	-- immediate 8 bit value to be taken in from the branch instruction, break up into separate immediate values
 			
 			-- inputs for writeback (the trailing edge of write back occurs in decode block)
 			--			inputs for write back will occur on falling edge of clock
@@ -38,14 +39,16 @@ entity decode is
 			store_data		: in std_logic_vector(num_bits-1 downto 0);		-- the data to be stored into register bank from writeback
 			
 			-- outputs
-			reg_a				: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand a
-			reg_b				: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand b
-			immediate_out	: out std_logic_vector(num_bits-1 downto 0);		-- immediate value needed for opcode (or garbage value)
-			wbPlusOne		: out std_logic_vector(num_bits-1 downto 0);		-- forwarded value provided to operand access
+			reg_a					: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand a
+			reg_b					: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand b
+			immediate_out		: out std_logic_vector(num_bits-1 downto 0);		-- immediate value needed for opcode (or garbage value)
+			immediate_out_Br	: out std_logic_vector(num_bits-1 downto 0);		-- immediate value of branch instruction needed for opcode (or garbage value)
+			wbPlusOne			: out std_logic_vector(num_bits-1 downto 0);		-- forwarded value provided to operand access
 			
 			-- control signals
 			store_enable	: in std_logic_vector(0 downto 0);					-- enable a store (disabled on a store word instruction
 			sel				: in std_logic;											-- selector for decode mux of immediate values
+			sel_Br			: in std_logic;											-- selector for decode mux of immediate values
 			rst				: in std_logic;											-- reset line
 			clk				: in std_logic);											-- system clock
 end decode;
@@ -56,6 +59,10 @@ architecture structural of decode is
 	signal immediate_4	: std_logic_vector(immediate_L-1 downto 0) := (others => '0');		-- four bit immediate value from input
 	signal im_mux			: std_logic_vector(immediate_L-1 downto 0) := (others => '0');		-- output of immediate mux to immediate register
 
+	signal immediate_8_Br	: std_logic_vector(immediate_L-1 downto 0) := (others => '0');		-- eight bit immediate value from input immediate
+	signal immediate_4_Br	: std_logic_vector(immediate_L-1 downto 0) := (others => '0');		-- four bit immediate value from input
+	signal im_mux_Br			: std_logic_vector(immediate_L-1 downto 0) := (others => '0');		-- output of immediate mux to immediate register
+
 	-- register bank outputs
 	signal reg_a_tmp		: std_logic_vector(num_bits-1 downto 0) := (others => '0');			-- value read out of register bank to store in register A
 	signal reg_b_tmp		: std_logic_vector(num_bits-1 downto 0) := (others => '0');			-- value read out of register bank to store in register B
@@ -65,6 +72,10 @@ begin
 	immediate_8 <= immediate;
 	immediate_4 <= "0000" & immediate(immediate_S-1 downto 0);			-- switched order of small immediate values
 	immediate_out(num_bits-1 downto immediate_L)	<= "00000000";
+	
+	immediate_8_Br <= immediate_Br;
+	immediate_4_Br <= "0000" & immediate_Br(immediate_L-1 downto immediate_S);
+	immediate_out_Br(num_bits-1 downto immediate_L)	<= "00000000";
 	
 	register_bank: entity work.reg_bank
 		port map(	reg_a_addr		=> addr_reg_a,
@@ -83,8 +94,20 @@ begin
 						in_1				=> immediate_4,		-- switched immediate values around to match control path logic
 						in_2				=> immediate_8,
 						o					=> im_mux,
+<<<<<<< HEAD
+						sel				=> sel);
+						
+	decode_mux_Br: entity work.mux2to1
+		generic map	(num_bits		=>immediate_L)
+		port map  	(clk				=>clk,
+						 in_1				=>immediate_4_Br,
+						 in_2				=>immediate_8_Br,
+						 o					=>im_mux_br,
+						 sel				=>sel_br);
+=======
 						sel				=> sel,
 						rst				=> rst);
+>>>>>>> 8ffc16d3303c95627ce3d34796bd079470a91bc4
 	
 	register_mux: entity work.GP_register
 		generic map(num_bits			=> immediate_L)
@@ -92,6 +115,12 @@ begin
 						rst				=> rst,
 						D					=> im_mux,
 						Q					=> immediate_out(immediate_L-1 downto 0));
+	register_mux_Br: entity work.gp_register
+		generic map(num_bits			=>immediate_L)
+		port map(	clk				=> clk,
+						rst				=> rst,
+						D					=> im_mux_Br,
+						Q					=> immediate_out_Br(immediate_L-1 downto 0));
 	
 	register_a: entity work.GP_register
 		port map(	clk				=> clk,

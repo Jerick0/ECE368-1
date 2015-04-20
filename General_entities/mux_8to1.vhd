@@ -40,7 +40,8 @@ entity mux_8to1 is
 			  H		: in  STD_LOGIC_Vector(15 downto 0);
 			  SEL 	: in  STD_LOGIC_Vector(2 downto 0);
 			  CLK 	: in 	STD_LOGIC;
-           O 	: out  STD_LOGIC_Vector(15 downto 0)
+           O 	: out  STD_LOGIC_Vector(15 downto 0);
+			  rst		: std_logic
 			  );
 end mux_8to1;
 

@@ -50,7 +50,7 @@ signal WB_ST_DATA_EN : STD_LOGIC_VECTOR(0 downto 0):=(others => '0');
 signal D_MUX_SEL : STD_LOGIC:='0';
 signal WB_DATA_MUX : STD_LOGIC:='0';
 signal INST_FETCH_BITCH : STD_LOGIC_VECTOR(15 downto 0):=(others => '0');
-signal PC : STD_LOGIC_VECTOR(4 downto 0):=(others => '0');
+signal PC : STD_LOGIC_VECTOR(12 downto 0):=(others => '0');
 signal RST_LINE : STD_LOGIC:='0';
 
 signal tmp_store_result	: std_logic_vector(15 downto 0) :=(others => '0');

@@ -31,6 +31,8 @@ entity decode is
 			addr_reg_a		: in std_logic_vector(addr_size-1 downto 0);		-- register bank address for operand a
 			addr_reg_b		: in std_logic_vector(addr_size-1 downto 0);		-- register bank address for operand b
 			immediate		: in std_logic_vector(immediate_L-1 downto 0);	-- immediate 8 bit value to be taken in, break up into separate immediate values
+			addr_reg_a_br	: in std_logic_vector(addr_size-1 downto 0);		-- register bank address for operand a in branch
+			addr_reg_b_br	: in std_logic_vector(addr_size-1 downto 0);		-- register bank address for operand b in branch
 			immediate_Br	: in std_logic_vector(immediate_L-1 downto 0);	-- immediate 8 bit value to be taken in from the branch instruction, break up into separate immediate values
 			
 			-- inputs for writeback (the trailing edge of write back occurs in decode block)
@@ -42,6 +44,8 @@ entity decode is
 			reg_a					: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand a
 			reg_b					: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand b
 			immediate_out		: out std_logic_vector(num_bits-1 downto 0);		-- immediate value needed for opcode (or garbage value)
+			reg_a_br				: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand a
+			reg_b_br				: out std_logic_vector(num_bits-1 downto 0);		-- value read from register bank for operand b
 			immediate_out_Br	: out std_logic_vector(num_bits-1 downto 0);		-- immediate value of branch instruction needed for opcode (or garbage value)
 			wbPlusOne			: out std_logic_vector(num_bits-1 downto 0);		-- forwarded value provided to operand access
 			
@@ -66,6 +70,8 @@ architecture structural of decode is
 	-- register bank outputs
 	signal reg_a_tmp		: std_logic_vector(num_bits-1 downto 0) := (others => '0');			-- value read out of register bank to store in register A
 	signal reg_b_tmp		: std_logic_vector(num_bits-1 downto 0) := (others => '0');			-- value read out of register bank to store in register B
+	signal reg_a_tmp_br	: std_logic_vector(num_bits-1 downto 0) := (others => '0');			-- value read out of register bank to store in register A
+	signal reg_b_tmp_br	: std_logic_vector(num_bits-1 downto 0) := (others => '0');			-- value read out of register bank to store in register B
 
 begin
 	-- connect immediate values to grab different possibilities
@@ -74,16 +80,20 @@ begin
 	immediate_out(num_bits-1 downto immediate_L)	<= "00000000";
 	
 	immediate_8_Br <= immediate_Br;
-	immediate_4_Br <= "0000" & immediate_Br(immediate_L-1 downto immediate_S);
+	immediate_4_Br <= "0000" & immediate_Br(immediate_S-1 downto 0);
 	immediate_out_Br(num_bits-1 downto immediate_L)	<= "00000000";
 	
 	register_bank: entity work.reg_bank
 		port map(	reg_a_addr		=> addr_reg_a,
+						reg_a_addr_br	=> addr_reg_a_br,
 						reg_b_addr		=> addr_reg_b,
+						reg_b_addr_br	=> addr_reg_b_br,
 						write_addr		=> store_addr,
 						data_in			=> store_data,
 						reg_a				=> reg_a_tmp,
+						reg_a_br			=> reg_a_tmp_br,
 						reg_b				=> reg_b_tmp,
+						reg_b_br			=> reg_b_tmp_br,
 						w_en				=> store_enable,
 						clk				=> clk,
 						rst				=> rst);
@@ -94,7 +104,8 @@ begin
 						in_1				=> immediate_4,		-- switched immediate values around to match control path logic
 						in_2				=> immediate_8,
 						o					=> im_mux,
-						sel				=> sel);
+						sel				=> sel,
+						rst				=> rst);
 						
 	decode_mux_Br: entity work.mux2to1
 		generic map	(num_bits		=>immediate_L)
@@ -102,7 +113,8 @@ begin
 						 in_1				=>immediate_4_Br,
 						 in_2				=>immediate_8_Br,
 						 o					=>im_mux_br,
-						 sel				=>sel_br);
+						 sel				=>sel_br,
+						 rst				=>rst);
 
 	
 	register_mux: entity work.GP_register
@@ -129,7 +141,19 @@ begin
 						rst				=> rst,
 						D					=> reg_b_tmp,
 						Q					=> reg_b);
+	
+	register_a_br: entity work.GP_register
+		port map(	clk				=> clk,
+						rst				=> rst,
+						D					=> reg_a_tmp_br,
+						Q					=> reg_a_br);
 						
+	register_b_br: entity work.GP_register
+		port map(	clk				=> clk,
+						rst				=> rst,
+						D					=> reg_b_tmp_br,
+						Q					=> reg_b_br);
+	
 	register_wbp1:	entity work.GP_register
 		port map(	clk				=> clk,
 						rst				=> rst,

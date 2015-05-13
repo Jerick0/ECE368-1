@@ -24,7 +24,7 @@ use work.all;
 entity execute is
 	generic(	addr_size	: integer:=8;			-- size of addressable memory
 				num_bits		: integer:=16;			-- size of data
-				num_ccr		: integer:= 4;			-- size of condition control register
+				num_ccr		: integer:= 16;			-- size of condition control register
 				num_opcode	: integer:= 4);		-- size of op code
 	
 	port(	-- inputs

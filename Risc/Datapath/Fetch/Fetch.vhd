@@ -61,9 +61,10 @@ architecture Structural of Fetch is
 
 	signal INSTR				: STD_LOGIC_VECTOR (inst_size-1 downto 0) := (others => '0'); -- Wires connecting Instruction Memory to Instruction Register
 	signal INSTR_BRANCH		: STD_LOGIC_VECTOR (inst_size-1 downto 0) := (others => '0');
-	signal PC_INDEX, INC_PC : STD_LOGIC_VECTOR (inst_addr_size-1 downto 0) := (others => '0');
+	signal PC_INDEX 			:	STD_LOGIC_VECTOR(inst_addr_size-1 downto 0):= (others => '0');
+	signal INC_PC 				: STD_LOGIC_VECTOR (inst_addr_size-1 downto 0) := (others => '0');
 	signal PC_INDEX_BRANCH, INC_PC_BRANCH	: STD_LOGIC_VECTOR(inst_addr_size-1 downto 0) := (others => '0');
-	signal mux_pc,mux_pc_branch	:	STD_LOGIC_VECTOR(inst_size-1 downto 0);
+	signal mux_pc, mux_pc_branch	:	STD_LOGIC_VECTOR(inst_addr_size-1 downto 0);
 	signal stack_out			: std_logic_vector(inst_size-1 downto 0)	:= (others => '0');
 	signal stack_out_branch	: std_logic_vector(inst_size-1 downto 0)	:= (others => '0');
 	

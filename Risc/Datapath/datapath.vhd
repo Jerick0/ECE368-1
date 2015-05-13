@@ -27,7 +27,7 @@ entity datapath is
 				pc_size			: integer:=13;
 				immediate_L		: integer:=8;
 				immediate_S		: integer:=4;
-				ccr_size			: integer:=4;
+				ccr_size			: integer:=16;
 				addr_size		: integer:= 4;			-- register bank addressing size
 				opcode_size		: integer:= 4);		-- number of bits to an op code
 	

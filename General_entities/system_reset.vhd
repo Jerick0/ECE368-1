@@ -23,7 +23,7 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 entity system_reset is
-	generic(	pc_size		: integer := 5);
+	generic(	pc_size		: integer := 13);
 	port(	clk	:	in std_logic;
 			pc		:	in std_logic_vector(pc_size-1 downto 0);
 			rst	:	out std_logic);

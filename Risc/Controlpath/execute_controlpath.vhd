@@ -34,8 +34,10 @@ entity execute_controlpath is
 			  E_instout 	: out  STD_LOGIC_Vector(15 downto 0);
            opcode 		: out  STD_LOGIC_Vector(3 downto 0);
            enable_SW 	: out  STD_LOGIC_Vector(0 downto 0);
+			  EX_mem_enable : out STD_LOGIC_VECTOR(0 downto 0);
 			  CLK				:	in STD_LOGIC;
 			  NotCLK			: 	in STD_LOGIC;
+			  
 			  RST				: in	STD_LOGIC
 			 
 			  );
@@ -88,6 +90,11 @@ with EF_inst(15 downto 12)
 --		end if;
 --	end if;
 --end process;
+
+
+-- if (EF_inst(15 downto 12 = "1100")then
+--EX_mem_Enable <='1';
+-- end if; 
 				
 end Behavioral;
 

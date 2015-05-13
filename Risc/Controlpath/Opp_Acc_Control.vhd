@@ -48,9 +48,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Opp_Acc_Control is
 
-    Port ( O_inst, O_inst_BR, EXEC, WB, WBPLUS1 	: in  STD_LOGIC_VECTOR (15 downto 0); -- Relevant Instructions from Instruction Register Bank
+    Port ( O_inst, EXEC, WB, WBPLUS1 	: in  STD_LOGIC_VECTOR (15 downto 0); -- Relevant Instructions from Instruction Register Bank(, O_inst_BR)
            PC								 	: in  STD_LOGIC_VECTOR (12 downto 0);
-			  CCR									: in  STD_LOGIC_VECTOR (3 downto 0);
+			  CCR									: in  STD_LOGIC_VECTOR (15 downto 0);
 			  BRANCH_FLG, CHOOSE_WISELY	: out STD_LOGIC;
 			  CLK									: in	STD_LOGIC;
 			  notCLK								: in 	STD_LOGIC;
@@ -66,9 +66,9 @@ signal OF_inst : STD_LOGIC_VECTOR(15 downto 0);
 signal OR_inst_BR : STD_LOGIC_VECTOR(15 downto 0);
 signal OF_inst_BR : STD_LOGIC_VECTOR(15 downto 0);
 signal delay_pc: STD_LOGIC_VECTOR(12 downto 0);
-signal CCR1: STD_LOGIC_VECTOR(3 downto 0);
-signal CCR2: STD_LOGIC_VECTOR(3 downto 0);
-signal CCR3: STD_LOGIC_VECTOR(3 downto 0);
+signal CCR1: STD_LOGIC_VECTOR(15 downto 0);
+signal CCR2: STD_LOGIC_VECTOR(15 downto 0);
+signal CCR3: STD_LOGIC_VECTOR(15 downto 0);
 begin
 
 O_R		: entity work.GP_register -- Operand Access Instruction (valid on Rising)
@@ -85,7 +85,7 @@ O_F		: entity work.GP_register -- Operand Access Instruction (valid on Falling)
 							
 O_R_BR	: entity work.GP_register -- Operand Access Branch Instruction (valid on Rising)
 			Port Map ( 	CLK 	=> CLK,
-							D   	=> O_inst_BR,
+							--D   	=> O_inst_BR,
 							Q	 	=> OR_inst_BR,
 							Rst	=> RST);
 							

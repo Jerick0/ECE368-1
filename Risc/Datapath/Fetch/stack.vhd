@@ -21,7 +21,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity stack is
-	generic(	addr_size			: integer :=5;		-- address line width
+	generic(	addr_size			: integer :=13;		-- address line width
 				stack_size			: integer :=4);	-- number of addresses stored on stack
 	
 	port(		-- inputs

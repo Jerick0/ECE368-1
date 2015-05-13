@@ -34,15 +34,18 @@ entity control_toplayer is
 					PC						: in STD_LOGIC_VECTOR(12 downto 0);
 					CLK 					: in  STD_LOGIC;
 					Rst 					: in  STD_LOGIC;
+					PC_mux_sel			: out  STD_LOGIC_Vector(1 downto 0);
 					e_opcode 			: out  STD_LOGIC_Vector(3 downto 0);
 					e_sw_enable 		: out  STD_LOGIC_vector(0 downto 0);
 					o_opA_muxsel		: out  STD_LOGIC_vector(2 downto 0);
 					o_opB_muxsel 		: out  STD_LOGIC_Vector(2 downto 0);
 					WB_reg_addr 		: out  STD_LOGIC_Vector(3 downto 0);
 					WB_sd_enable 		: out  STD_LOGIC_Vector(0 downto 0);
+					EX_mem_enable		: out  STD_LOGIC_VECTOR(0 downto 0);
 					d_in_mux_sel 		: out  STD_LOGIC;
 					wb_datamux_sel 	: out  STD_LOGIC;
 					instruction_wb 	: out  STD_LOGIC_VECTOR(3 downto 0)
+					
 					);
 end control_toplayer;
 
@@ -62,7 +65,6 @@ signal E_FtoW_R					: STD_LOGIC_VECTOR(15 downto 0);
 signal W_RtoW_F					: STD_LOGIC_VECTOR(15 downto 0);
 signal W_FtoW1_R					: STD_LOGIC_VECTOR(15 downto 0);	
 
-
 --forwarding paths
 signal Exec					 			: STD_LOGIC_VECTOR(15 downto 0);
 signal WB 								: STD_LOGIC_VECTOR(15 downto 0);
@@ -75,6 +77,12 @@ WB <= W_ftoW1_R;
 
 
 instruction_WB<= WB(15 downto 12);
+
+Fetch_State: entity work.Fetch_state
+			port map(		F_inst			=>instruction_fetch,
+								CLK				=>CLK,
+								sel				=>PC_Mux_sel
+								);
 
 
 Decode_state: entity work.Decode_controlpath
@@ -97,6 +105,7 @@ Oppa_state: entity work.Opp_Acc_Control
 								WB					=> WB,
 								WBPlus1			=> WBPlus1,
 								PC					=> PC,
+								CCR				=>"0000000000000000",
 								RST				=> rst
 								);
 								
@@ -107,7 +116,8 @@ execute_state: entity work.execute_controlpath
 								E_instout		=> E_FtoW_R,
 								opcode 			=> e_opcode,
 								enable_SW 		=> e_sw_enable,
-								rst				=> rst
+								rst				=> rst,
+								EX_mem_enable  => EX_mem_enable
 								);
 
 WB_state: entity work.WB_controlpath

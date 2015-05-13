@@ -40,6 +40,8 @@ entity Opacc is
            WB_F 				: in  STD_LOGIC_Vector(15 downto 0);			  
 			  RR_EX_F 			: in  STD_LOGIC_Vector(15 downto 0);           
            WBplus1_F 		: in  STD_LOGIC_Vector(15 downto 0);
+			  shadow_addr		: in std_logic_vector(1 downto 0);
+			  shadow_out		: out std_logic_vector(15 downto 0);
            Cntl_A 			: in  STD_LOGIC_Vector(2 downto 0);
            Cntl_B 			: in  STD_LOGIC_Vector(2 downto 0);
 			  CLK					: in  STD_LOGIC;
@@ -83,6 +85,7 @@ begin
 							 G => Decode_Reg_BR,
 							 H => Reg_B_BR,
 							 SEL=>Cntl_B,
+							 rst=>rst, 
 							 CLK=>notClock,
 							 O => OP_B);
 
@@ -123,6 +126,10 @@ begin
 --							 EN =>notclock,
 --							 OUTP => OP_A,
 --							 rst => rst);
+
+--		S_REG: entity work.shadow_register
+--				port map( reg	=> shadow_in,
+--							 our => showdow_out);
 							 
 
 end Behavioral;
